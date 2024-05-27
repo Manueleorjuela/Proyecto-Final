@@ -4,4 +4,6 @@
         <file>Imagenes_Proyecto/Fondos/Primer nivel_.png</file>
         <file>Imagenes_Proyecto/Fondos/Segundo nivel.png</file>
     </qresource>
+    <qresource prefix="/Objetos"/>
+    <qresource prefix="/Elementos"/>
 </RCC>

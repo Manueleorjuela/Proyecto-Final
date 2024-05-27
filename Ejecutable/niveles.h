@@ -14,6 +14,7 @@ private:
     QString Direccion_Fondo;
     QGraphicsScene *Escena;
     QPixmap *Pixmap;
+    QPixmap PixmapAjustado;
 
 public:
     Niveles();

@@ -11,11 +11,17 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    niveles.cpp
+    nivel1.cpp \
+    niveles.cpp \
+    objetos.cpp \
+    soldados.cpp
 
 HEADERS += \
     mainwindow.h \
-    niveles.h
+    nivel1.h \
+    niveles.h \
+    objetos.h \
+    soldados.h
 
 FORMS += \
     mainwindow.ui

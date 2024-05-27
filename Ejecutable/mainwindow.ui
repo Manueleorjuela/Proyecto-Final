@@ -17,12 +17,74 @@
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>10</y>
-      <width>550</width>
-      <height>490</height>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>600</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QWidget" name="Menu" native="true">
+    <property name="geometry">
+     <rect>
+      <x>315</x>
+      <y>300</y>
+      <width>211</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QPushButton" name="Iniciar_Partida">
+       <property name="font">
+        <font>
+         <family>System</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>Iniciar Partida</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Registros">
+       <property name="font">
+        <font>
+         <family>System</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>Mejor Puntaje Registrado</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Creditos">
+       <property name="font">
+        <font>
+         <family>System</family>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Creditos</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Salir">
+       <property name="font">
+        <font>
+         <family>System</family>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Salir</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
