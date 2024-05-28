@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "niveles.h"
-#include "nivel1.h"
+#include "Nivel1.h"
 
 using namespace std;
 

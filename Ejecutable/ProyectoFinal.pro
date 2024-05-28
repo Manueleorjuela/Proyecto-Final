@@ -9,16 +9,16 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Nivel1.cpp \
     main.cpp \
     mainwindow.cpp \
-    nivel1.cpp \
     niveles.cpp \
     objetos.cpp \
     soldados.cpp
 
 HEADERS += \
+    Nivel1.h \
     mainwindow.h \
-    nivel1.h \
     niveles.h \
     objetos.h \
     soldados.h
