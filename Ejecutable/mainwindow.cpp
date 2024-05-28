@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -11,7 +10,11 @@ MainWindow::MainWindow(QWidget *parent)
     Fondos->Cargar_PantallaInicial();
     Escena = Fondos->Get_Escena();
     ui->graphicsView->setScene(Escena);
-    Primer_Nivel = new Nivel1(Escena, 5,5);
+    ui->graphicsView->setFocusPolicy(Qt::StrongFocus);
+    ui->graphicsView->setFocus();
+    ui->graphicsView->scene()->installEventFilter(this);
+    this->setFocusPolicy(Qt::StrongFocus);
+    this->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -26,14 +29,22 @@ void MainWindow::on_Iniciar_Partida_clicked()
 {
     ui->Menu->hide();
     Fondos->Cargar_Primer_Nivel();
+    Ejecucion_PrimerNivel = true;
     ui->graphicsView->setScene(Escena);
+    Primer_Nivel = new Nivel1(Escena, 5, 5);
     Primer_Nivel->Primer_Modulo();
 }
-
 
 void MainWindow::on_Salir_clicked()
 {
     close();
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (Ejecucion_PrimerNivel){
+        Primer_Nivel->keyPressEvent(event);
+    }
 }
 
 

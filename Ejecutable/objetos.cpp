@@ -1,6 +1,16 @@
 #include "objetos.h"
 
-QString Objetos::get_Direcccion_Imagen()
+Tipo Objetos::Get_Clasificacion()
+{
+    return Clasificacion;
+}
+
+QGraphicsPixmapItem* Objetos::Get_Objeto()
+{
+    return Objeto_En_La_Pantalla;
+}
+
+QPixmap Objetos::get_Direcccion_Imagen()
 {
     return Direccion_Imagen;
 }
@@ -9,10 +19,10 @@ Objetos::Objetos(Tipo Clasificacion)
 {
     switch (Clasificacion) {
     case Tipo::Cañones:
-        Direccion_Imagen = "C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Mortero_Aleman.png";
+        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Mortero_Aleman.png");
         break;
         case Tipo::Granadas:
-        // Inicializar para Granadas
+        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Bomba-removebg-preview.png");
         break;
     case Tipo::Balas:
         // Inicializar para Balas
@@ -26,4 +36,5 @@ Objetos::Objetos(Tipo Clasificacion)
     default:
         break;
     }
+    Objeto_En_La_Pantalla = Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
 }

@@ -19,6 +19,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    void keyPressEvent(QKeyEvent *event);
+
 private slots:
     void on_Iniciar_Partida_clicked();
     void on_Salir_clicked();
@@ -28,5 +31,7 @@ private:
     QGraphicsScene *Escena;
     Ui::MainWindow *ui;
     Nivel1 *Primer_Nivel;
+    bool Ejecucion_PrimerNivel;
 };
+
 #endif // MAINWINDOW_H

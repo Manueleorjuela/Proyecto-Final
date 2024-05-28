@@ -1,6 +1,9 @@
 #ifndef SOLDADOS_H
 #define SOLDADOS_H
 #include <QString>
+#include <QGraphicsPixmapItem>
+#include <QPixmap>
+
 using namespace std;
 
 enum class Nacionalidad{
@@ -8,20 +11,39 @@ enum class Nacionalidad{
     Frances
 };
 
+enum class Direccion{
+    Derecha,
+    Izquierda,
+    Arriba,
+    Abajo
+};
+
 class Soldados
 {
+
     int Vida;
-    QString Direccion_Imagen;
+    QPixmap Direccion_Imagen;
+    Direccion Orientacion;
     Nacionalidad nacionalidad;
+    QGraphicsPixmapItem* Objeto_En_La_Pantalla;
 
 public:
     Soldados(Nacionalidad nacion);
-    void Movimiento_Soldado();
 
+
+    void setIamgen(QPixmap NuevaImagen);
+
+    QGraphicsPixmapItem *get_Objeto_En_La_Pantalla();
+    QPixmap Get_Imagen();
 
     int Get_Vida() const;
     void Set_Vida(int Nueva_vida);
-    QString Get_Direccion_Imagen();
+
+    void Set_Direccion(Direccion Pos);
+    Direccion Get_Direccion();
+
+    ~Soldados();
+
 };
 
 
