@@ -26,17 +26,20 @@ class Soldados
     Direccion Orientacion;
     Nacionalidad nacionalidad;
     QGraphicsPixmapItem* Objeto_En_La_Pantalla;
+    vector <QGraphicsPixmapItem*> Secuencia_Muerte;
+
+    void Inicializar_Muerte_Franceses();
 
 public:
     Soldados(Nacionalidad nacion);
-
+    Soldados();
 
     void setIamgen(QPixmap NuevaImagen);
-
     QGraphicsPixmapItem *get_Objeto_En_La_Pantalla();
     QPixmap Get_Imagen();
+    vector <QGraphicsPixmapItem*> get_Secuencia_Muerte();
 
-    int Get_Vida() const;
+    int Get_Vida();
     void Set_Vida(int Nueva_vida);
 
     void Set_Direccion(Direccion Pos);

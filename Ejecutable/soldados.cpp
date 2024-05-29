@@ -1,5 +1,14 @@
 #include "soldados.h"
 
+void Soldados::Inicializar_Muerte_Franceses()
+{
+    for (int i = 4; i > 0; i--){
+        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Mueriendo_Momento" + QString::number(i) + "-removebg-preview.png");
+        Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+        Secuencia_Muerte.push_back(Objeto_En_La_Pantalla);
+    }
+}
+
 Soldados::Soldados(Nacionalidad nacion)
    : nacionalidad(nacion), Orientacion(Direccion::Izquierda)
 {
@@ -9,10 +18,17 @@ Soldados::Soldados(Nacionalidad nacion)
         Direccion_Imagen =QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Izquierda.png");
         break;
     case Nacionalidad::Frances:
+        Inicializar_Muerte_Franceses();
         Vida = 100;
         Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Frances_Parado_Izquierda-removebg-preview.png");
     }
+
     Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+}
+
+Soldados::Soldados()
+{
+
 }
 
 void Soldados::setIamgen(QPixmap NuevaImagen)
@@ -28,6 +44,21 @@ QGraphicsPixmapItem *Soldados::get_Objeto_En_La_Pantalla()
 QPixmap Soldados::Get_Imagen()
 {
     return Direccion_Imagen;
+}
+
+vector<QGraphicsPixmapItem *> Soldados::get_Secuencia_Muerte()
+{
+    return Secuencia_Muerte;
+}
+
+int Soldados::Get_Vida()
+{
+    return Vida;
+}
+
+void Soldados::Set_Vida(int Nueva_vida)
+{
+    Vida = Nueva_vida;
 }
 
 

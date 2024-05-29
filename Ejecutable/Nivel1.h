@@ -19,12 +19,12 @@ private:
     QGraphicsScene *Nivel;
     QTimer *Timer;
     QTimer *parabolicTimer;
-
+    QTimer *Colisiones;
 
 
     // Personaje principal
     vector<Soldados> Soldados_Franceses_EnEscena;
-    Soldados *Pierre_De_Gaulle;
+    Soldados* Pierre_De_Gaulle;
 
     //Enemigos
     vector<Objetos> Cañones_Alemanes_EnEscena;
@@ -54,7 +54,6 @@ private:
 
     //Para las animaciones
     void MoverPersonaje(int DeltX, int DeltY);
-    Direccion Orientacion;
 
     //Moverse Izquierda - Derecha
     void Ubicar_Personaje_Izquierda();
@@ -64,25 +63,28 @@ private:
     void Agachar_Personaje();
     bool Agachado;
 
-
     void Lanzamiento_Proyectiles();
     vector<Objetos> Proyectiles_Ronda;
     void Ubicar_Proyectiles();
     void Ejecutar_Movimiento_Parabolico();
     int  Numero_Bomba;
-    int Numero_Ronda;
-    QTimer *Timer_Ronda;
+    //int Numero_Ronda;
+    //QTimer *Timer_Ronda;
     void Inicializar_Proyectiles();
-    void Movimiento_Parabolico(QGraphicsPixmapItem* Proyectil, QTimer* timer, double x0, double y0, double vx, double vy, double t, int Limite, QGraphicsPixmapItem* Explosion);
     int Limite();
 
     //Ejecucion explosion
-    void Secuencia_Explosion(QGraphicsPixmapItem* Explosion);
     vector <Objetos> Explosiones;
     void Inicializar_Explosiones();
 
+    //Colisiones
+    void Colisiones_PersonajePrincipal();
+    void Muerte_Pierre(int Daño);
+
 private slots:
+    void Secuencia_Animaciones(QGraphicsPixmapItem* Explosion, int Frame, vector<QGraphicsPixmapItem*> Secuencia_Explosiones);
     void Posicion_Canon();
+    void Movimiento_Parabolico(QGraphicsPixmapItem* Proyectil, QTimer* timer, double x0, double y0, double vx, double vy, double t, int Limite, QGraphicsPixmapItem* Explosion);
 
 public:
     //Constructor

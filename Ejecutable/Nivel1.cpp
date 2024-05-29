@@ -27,10 +27,15 @@ Nivel1::Nivel1(QGraphicsScene *&Fondo, int Cant_Franceses, int Cant_Cañones_Ale
     Inicializar_Cañones();
     Inicializar_Explosiones();
     Inicializar_Proyectiles();
+
+    Colisiones = new QTimer(this);
+    connect(Colisiones, &QTimer::timeout, this, &Nivel1::Colisiones_PersonajePrincipal);
+    Colisiones->start(100);
+
     Timer = new QTimer(this);
     Agachado = false;
     Numero_Bomba = 0;
-    Numero_Ronda = 0;
+    //Numero_Ronda = 0;
 }
 
 void Nivel1::Primer_Modulo()
@@ -72,7 +77,7 @@ void Nivel1::Ubicar_Cañones()
 
 void Nivel1::Lanzamiento_Proyectiles()
 {
-    Numero_Ronda++;
+    //ddNumero_Ronda++;
     Ubicar_Proyectiles();
     Ejecutar_Movimiento_Parabolico();
     Proyectiles_Ronda.clear();
@@ -119,40 +124,37 @@ void Nivel1::Ejecutar_Movimiento_Parabolico()
 
 void Nivel1::Movimiento_Parabolico(QGraphicsPixmapItem* Proyectil, QTimer* timer, double x0, double y0, double vx, double vy, double t, int Limite, QGraphicsPixmapItem* Explosion)
 {
-    double g = 9.8; // Aceleración debida a la gravedad
+    double g = 9.8;
     double newX = x0 + vx * t;
     double newY = y0 + vy * t + 0.5 * g * t * t;
     Proyectil->setPos(newX, newY);
 
-    if (newY > y0 + Limite) { // Suponiendo que y0 es el suelo
+    if (newY > y0 + Limite) {
         Explosion->setPos(newX, newY);
-        Secuencia_Explosion(Explosion);
-        Proyectil->scene()->removeItem(Proyectil); // Eliminar el proyectil de la escena
-        timer->stop(); // Detener el QTimer
-        timer->deleteLater();// Eliminar el QTimer después de detenerlo
+        Explosion->setScale(0.6);
+        Secuencia_Animaciones(Explosion, 5, Explosiones[0].Get_Secuencia_Explosiones());
+        Proyectil->scene()->removeItem(Proyectil);
+        timer->stop();
+        timer->deleteLater();
     }
 }
 
-void Nivel1::Secuencia_Explosion(QGraphicsPixmapItem* Explosion)
+void Nivel1::Secuencia_Animaciones(QGraphicsPixmapItem* Imagen, int frame, vector<QGraphicsPixmapItem*> Secuencia_Animacion)
 {
-    vector<QGraphicsPixmapItem*> Secuencia_Explosiones = Explosiones[0].Get_Secuencia_Explosiones();
-    Explosion->setScale(0.8);
-    Nivel->addItem(Explosion);
+    Nivel->addItem(Imagen);
     QTimer* animTimer = new QTimer(this);
-    int frame = 5;
-
     connect(animTimer, &QTimer::timeout, this, [=]() mutable {
+
         if (frame > -1) {
-            Explosion->setPixmap(Secuencia_Explosiones[frame]->pixmap());
+            Imagen->setPixmap(Secuencia_Animacion[frame]->pixmap());
             frame--;
         } else {
             animTimer->stop();
             animTimer->deleteLater();
-            Nivel->removeItem(Explosion); // Eliminar la explosión de la escena después de la animación
-            delete Explosion; // Liberar la memoria de la explosión
+            Nivel->removeItem(Imagen);
         }
     });
-    animTimer->start(100); // Cambiar la imagen cada 100 ms
+    animTimer->start(100);
 }
 
 int Nivel1::Limite()
@@ -167,6 +169,7 @@ void Nivel1::Inicializar_Explosiones()
 {
     for (int i = 0; i < Cantidad_Cañones_Alemanes; i++){
         Explosiones.push_back(Objetos(Tipo::Explosion));
+        Explosiones[i].Get_Objeto()->setData(Qt::UserRole, "Explosion");
     }
 }
 
@@ -200,6 +203,8 @@ Nivel1::~Nivel1()
 {
     delete item;
     delete Timer;
+    delete parabolicTimer;
+    delete Colisiones;
 }
 
 void Nivel1::keyPressEvent(QKeyEvent *event)
@@ -272,7 +277,7 @@ void Nivel1::Ubicar_Personaje_Derecha()
 void Nivel1::Agachar_Personaje()
 {
 
-    Orientacion = Pierre_De_Gaulle->Get_Direccion();
+    Direccion Orientacion = Pierre_De_Gaulle->Get_Direccion();
 
     if(!Agachado){
         switch(Orientacion){
@@ -312,4 +317,39 @@ void Nivel1::Agachar_Personaje()
     }
     Agachado = !Agachado;
     Pierre_De_Gaulle->get_Objeto_En_La_Pantalla()->setPixmap(Pierre_De_Gaulle->Get_Imagen());
+}
+
+void Nivel1::Colisiones_PersonajePrincipal()
+{
+    QGraphicsPixmapItem* Pantalla = Pierre_De_Gaulle->get_Objeto_En_La_Pantalla();
+    QList<QGraphicsItem*> itemsColisionados = Pantalla->collidingItems();
+    QString tipoObjeto;
+    QGraphicsPixmapItem* Imagen_Colision;
+    if (!itemsColisionados.isEmpty()) {
+        for (QGraphicsItem* item : itemsColisionados) {
+            Imagen_Colision = dynamic_cast<QGraphicsPixmapItem*>(item);
+            if (Imagen_Colision) {
+                tipoObjeto = Imagen_Colision->data(Qt::UserRole).toString();
+                if (tipoObjeto == "Explosion"){
+                    Colisiones->stop();
+                    Muerte_Pierre(20);
+                    QTimer::singleShot(1000, this, [this]() {
+                        Colisiones->start(100); // Reanudar el temporizador después de 1 segundo
+                    });
+                    break;
+                }
+            }
+        }
+    }
+    qDebug() << Pierre_De_Gaulle->Get_Vida();
+}
+
+void Nivel1::Muerte_Pierre(int Daño)
+{
+    int Vida_Actual = Pierre_De_Gaulle->Get_Vida();
+    if (Vida_Actual == 0){
+        Secuencia_Animaciones(Pierre_De_Gaulle->get_Objeto_En_La_Pantalla(), 3, Pierre_De_Gaulle->get_Secuencia_Muerte());
+    }else{
+        Pierre_De_Gaulle->Set_Vida(Vida_Actual-Daño);
+    }
 }
