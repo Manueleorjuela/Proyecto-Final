@@ -17,13 +17,15 @@ class Nivel1 : public QGraphicsScene
 private:
     QGraphicsScene *Nivel;
     QTimer *Timer;
-    QTimer *parabolicTimer;
+    //QTimer *parabolicTimer;
     QTimer *Colisiones;
-    QTimer *Colisiones_Objetos_Mapa;
-
+    QTimer *Colisiones_Aliados;
+    QTimer *Llegada_Alemanes;
 
     // Personaje principal
     vector<Soldados> Soldados_Franceses_EnEscena;
+    vector <Soldados> Soldados_Alemanes_EnEscena;
+
     Soldados* Pierre_De_Gaulle;
 
     //Enemigos
@@ -34,6 +36,7 @@ private:
 
     //Cantidad Objetos
     int Cantidad_Soldados_Franceses;
+    int Cantidad_Soldados_Alemanes;
     int Cantidad_Cañones_Alemanes;
 
     //Limites Soldados Franceses
@@ -66,12 +69,11 @@ private:
     void Lanzamiento_Proyectiles();
     vector<Objetos> Proyectiles_Ronda;
     void Ubicar_Proyectiles();
-    void Ejecutar_Movimiento_Parabolico();
+    void Ejecutar_Movimiento_Parabolico_Bombas();
     int  Numero_Bomba;
     //int Numero_Ronda;
     //QTimer *Timer_Ronda;
     void Inicializar_Proyectiles();
-    int Limite();
 
     //Ejecucion explosion
     vector <Objetos> Explosiones;
@@ -83,20 +85,40 @@ private:
     void Inicializar_Colisiones();
 
     //Eliminar_Aliados
-    void Muerte_Soldado_Frances(int indice);
+    void Muerte_Soldado_Frances(int indice, int Daño);
     void Colisiones_SoldadosFranceses();
 
+    //Segundo Modulo
+    void Inicializar_Soldados_Alemanes();
+    void Añadir_SoldadosAlemanes_EnEscena();
+    void Ubicar_Soldados_Alemanes();
+
+    //Inicializar Gas_Mostaza
+    vector<Objetos> Fumigacion_Gas;
+    vector<Objetos> Efecto_Gas_Mostaza;
+    void Inicializar_Efecto_Gas();
+    void Inicializar_Barrido_De_Gas();
+    void Lanzamiento_Gas();
+    void Ubicar_Gas();
+    void Ejecutar_Movimiento_Parabolico_Gas();
+
+    //Iniciar_Tiroteo
+
+
 private slots:
-    void Secuencia_Animaciones(QGraphicsPixmapItem* Explosion, int Frame, vector<QGraphicsPixmapItem*> Secuencia_Explosiones);
-    void Posicion_Canon();
-    void Movimiento_Parabolico(QGraphicsPixmapItem* Proyectil, QTimer* timer, double x0, double y0, double vx, double vy, double t, int Limite, QGraphicsPixmapItem* Explosion);
+
+    void Ejecutar_Movimiento_Circular();
+    void Posicionar_Enemigos(int Repeticiones, int Posicion_Final, QTimer* Timer);
+    void Secuencia_Animaciones(QGraphicsPixmapItem* Explosion, int Frame, vector<QGraphicsPixmapItem*> Secuencia_Explosiones, int Timer);
+    void Movimiento_Parabolico(QGraphicsPixmapItem* Proyectil, QTimer* timer, double x0, double y0, double vx, double vy, double t, int Limite, QGraphicsPixmapItem* Explosion, int Case, double Escala);
 
 public:
     //Constructor
-    Nivel1(QGraphicsScene *&Fondo, int Cant_Franceses, int Cant_Cañones_Alemanes);
+    Nivel1(QGraphicsScene *&Fondo, int Cant_Franceses, int Cant_Cañones_Alemanes, int Cant_Soldados_Alemanes);
     //Movimiento
     void keyPressEvent(QKeyEvent *event) override;
     void Primer_Modulo();
+    void Segundo_Modulo();
 
     ~Nivel1();
 };

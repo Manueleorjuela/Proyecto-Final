@@ -9,24 +9,38 @@ void Soldados::Inicializar_Muerte_Franceses()
     }
 }
 
+void Soldados::Inicializar_Muerte_Alemanes()
+{
+    for (int i = 4; i > 0; i--){
+        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Aleman_Mueriendo_Momento" + QString::number(i) + "-removebg-preview.png");
+        Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+        Secuencia_Muerte.push_back(Objeto_En_La_Pantalla);
+    }
+}
+
 Soldados::Soldados(Nacionalidad nacion)
    : nacionalidad(nacion), Orientacion(Direccion::Izquierda)
 {
     switch (nacionalidad) {
     case Nacionalidad::Aleman:
+        Inicializar_Muerte_Franceses();
         Vida = 100;
-        //Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Izquierda.png");
+        Agachado_Derecha = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Aleman_Agachado_Derecha-removebg-preview.png");
+        Agachado_Izquierda = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Aleman_Agachado_Izquierda-removebg-preview.png");
+        Parado_Izquierda = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Aleman_Parado_Izquierda-removebg-preview.png");
+        Parado_Derecha = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Aleman_Parado_Derecha-removebg-preview.png");
+        Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Parado_Derecha);
         break;
     case Nacionalidad::Frances:
         Inicializar_Muerte_Franceses();
         Vida = 100;
         Agachado_Derecha = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Agachado_Derecha-removebg-preview.png");
         Agachado_Izquierda = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Agachado_Izquierda-removebg-preview.png");
-        Parado_Izquierda = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Frances_Parado_Izquierda-removebg-preview.png");
-        Parado_Derecha = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Frances_Parado_Derecha-removebg-preview.png");
+        Parado_Izquierda = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Izquierda-removebg-preview.png");
+        Parado_Derecha = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Derecha-removebg-preview.png");
+        Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Parado_Izquierda);
+        break;
     }
-
-    Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Parado_Izquierda);
 }
 
 Soldados::Soldados()

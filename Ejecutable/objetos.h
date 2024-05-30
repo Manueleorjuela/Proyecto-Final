@@ -13,8 +13,8 @@ enum class Tipo{
     Granadas,
     Balas,
     Gas_Mostaza,
-    Explosion
-};
+    Explosion,
+    Gas};
 
 class Objetos
 {
@@ -24,20 +24,30 @@ private:
     QPixmap Direccion_Imagen;
     double velocidadenX;
     double velocidadenY;
+    double Velocidad_Angular;
+    double Radio;
+    double Num_Vueltas;
+
+    int Punto_Explosion;
     Tipo Clasificacion;
     vector <QGraphicsPixmapItem*> Secuencia_Explosiones;
 
     //Asignacion aleatoria de las velocidades
-    int generarNumeroAleatorio();
+    int generarNumeroAleatorio(int, int);
 
 public:
 
     double Velocidad_X();
     double Velocidad_Y();
+    int Get_Punto_Explosion() const ;
+
     Tipo Get_Clasificacion();
     QGraphicsPixmapItem* Get_Objeto();
     QPixmap get_Direcccion_Imagen();
     Objetos(Tipo Clasificacion);
+    double get_Velocidad_Angular();
+    double get_Radio();
+    double get_NumVueltas();
 
     vector <QGraphicsPixmapItem*> Get_Secuencia_Explosiones();
 
