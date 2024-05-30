@@ -27,15 +27,9 @@ Nivel1::Nivel1(QGraphicsScene *&Fondo, int Cant_Franceses, int Cant_Cañones_Ale
     Inicializar_Cañones();
     Inicializar_Explosiones();
     Inicializar_Proyectiles();
-
-    Colisiones = new QTimer(this);
-    connect(Colisiones, &QTimer::timeout, this, &Nivel1::Colisiones_PersonajePrincipal);
-    Colisiones->start(100);
-
-    Timer = new QTimer(this);
+    Inicializar_Colisiones();
     Agachado = false;
     Numero_Bomba = 0;
-    //Numero_Ronda = 0;
 }
 
 void Nivel1::Primer_Modulo()
@@ -51,10 +45,10 @@ void Nivel1::Añadir_Soldados_FrancesesEscena()
     for (int i = 0; i < Cantidad_Soldados_Franceses; i++){
         item = Soldados_Franceses_EnEscena[i].get_Objeto_En_La_Pantalla();
         item->setScale(factor_escala);
-        item->setPos(670, i * 130);
+        item->setPos(670, (i+1) * 130);
         Nivel->addItem(item);
     }
-    Pierre_De_Gaulle = &Soldados_Franceses_EnEscena[2];
+    Pierre_De_Gaulle = &Soldados_Franceses_EnEscena[0];
 }
 
 void Nivel1::Añadir_Cañones()
@@ -71,13 +65,14 @@ void Nivel1::Añadir_Cañones()
 
 void Nivel1::Ubicar_Cañones()
 {
+    Timer = new QTimer(this);
     connect(Timer, &QTimer::timeout, this, &Nivel1::Posicion_Canon);
     Timer->start(100);
 }
 
 void Nivel1::Lanzamiento_Proyectiles()
 {
-    //ddNumero_Ronda++;
+    //Numero_Ronda++;
     Ubicar_Proyectiles();
     Ejecutar_Movimiento_Parabolico();
     Proyectiles_Ronda.clear();
@@ -238,85 +233,68 @@ void Nivel1::keyPressEvent(QKeyEvent *event)
 void Nivel1::MoverPersonaje(int deltaX, int deltaY)
 {
     QGraphicsPixmapItem *Pierre_De_Gaulle_EnEscena = Pierre_De_Gaulle->get_Objeto_En_La_Pantalla();
-
-
     int Posicion_X = Pierre_De_Gaulle_EnEscena->x() + deltaX;
     int Posicion_Y = Pierre_De_Gaulle_EnEscena->y() + deltaY;
-
-    // Limitar las posiciones a los límites definidos
     Posicion_X = clamp(Posicion_X, LIMITE_IZQUIERDO, LIMITE_DERECHO);
     Posicion_Y = clamp(Posicion_Y, LIMITE_ARRIBA, LIMITE_ABAJO);
-
-    // Actualizar las posiciones del personaje
     Pierre_De_Gaulle_EnEscena->setX(Posicion_X);
     Pierre_De_Gaulle_EnEscena->setY(Posicion_Y);
 }
 
 void Nivel1::Ubicar_Personaje_Izquierda()
 {
-
     if (!Agachado){
-            Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Izquierda-removebg-preview.png"));
+            Pierre_De_Gaulle->setIamgen(Pierre_De_Gaulle->Get_Imagen_Parado_Izquierda());
     }else{
-            Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Agachado_Izquierda-removebg-preview.png"));
+            Pierre_De_Gaulle->setIamgen(Pierre_De_Gaulle->Get_Imagen_Agachado_Izquierda());
     }
     Pierre_De_Gaulle->get_Objeto_En_La_Pantalla()->setPixmap(Pierre_De_Gaulle->Get_Imagen());
 }
 
 void Nivel1::Ubicar_Personaje_Derecha()
 {
-
     if (!Agachado){
-        Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Derecha-removebg-preview.png"));
+        Pierre_De_Gaulle->setIamgen(Pierre_De_Gaulle->Get_Imagen_Parado_Derecha());
     }else{
-        Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Agachado_Derecha-removebg-preview.png"));
+        Pierre_De_Gaulle->setIamgen(Pierre_De_Gaulle->Get_Imagen_Agachado_Derecha());
     }
     Pierre_De_Gaulle->get_Objeto_En_La_Pantalla()->setPixmap(Pierre_De_Gaulle->Get_Imagen());
 }
 
 void Nivel1::Agachar_Personaje()
 {
-
     Direccion Orientacion = Pierre_De_Gaulle->Get_Direccion();
-
-    if(!Agachado){
-        switch(Orientacion){
+    QPixmap nuevaImagen;
+    if (!Agachado) {
+        switch (Orientacion) {
         case Direccion::Izquierda:
-            Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Agachado_Izquierda-removebg-preview.png"));
-            break;
-        case Direccion::Derecha:
-            Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Agachado_Derecha-removebg-preview.png"));
-            break;
-        case Direccion:: Arriba:
-            Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Agachado_Izquierda-removebg-preview.png"));
-            break;
-        case Direccion::Abajo:
-            Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Agachado_Derecha-removebg-preview.png"));
-            break;
-        default:
-            break;
-        }
-    }
-    else{
-        switch(Orientacion){
-        case Direccion::Izquierda:
-            Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Izquierda-removebg-preview.png"));
-            break;
-        case Direccion::Derecha:
-            Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Derecha-removebg-preview.png"));
-            break;
         case Direccion::Arriba:
-            Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Izquierda-removebg-preview.png"));
+            nuevaImagen = Pierre_De_Gaulle->Get_Imagen_Agachado_Izquierda();
             break;
+        case Direccion::Derecha:
         case Direccion::Abajo:
-            Pierre_De_Gaulle->setIamgen(QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Izquierda-removebg-preview.png"));
+            nuevaImagen = Pierre_De_Gaulle->Get_Imagen_Agachado_Derecha();
+            break;
+        default:
+            break;
+        }
+    } else {
+        switch (Orientacion) {
+        case Direccion::Izquierda:
+        case Direccion::Arriba:
+            nuevaImagen = Pierre_De_Gaulle->Get_Imagen_Parado_Izquierda();
+            break;
+        case Direccion::Derecha:
+        case Direccion::Abajo:
+            nuevaImagen = Pierre_De_Gaulle->Get_Imagen_Parado_Derecha();
             break;
         default:
             break;
         }
     }
+    Pierre_De_Gaulle->setIamgen(nuevaImagen);
     Agachado = !Agachado;
-    Pierre_De_Gaulle->get_Objeto_En_La_Pantalla()->setPixmap(Pierre_De_Gaulle->Get_Imagen());
+    Pierre_De_Gaulle->get_Objeto_En_La_Pantalla()->setPixmap(nuevaImagen);
 }
 
 void Nivel1::Colisiones_PersonajePrincipal()
@@ -334,14 +312,13 @@ void Nivel1::Colisiones_PersonajePrincipal()
                     Colisiones->stop();
                     Muerte_Pierre(20);
                     QTimer::singleShot(1000, this, [this]() {
-                        Colisiones->start(100); // Reanudar el temporizador después de 1 segundo
+                        Colisiones->start(100);
                     });
                     break;
                 }
             }
         }
     }
-    qDebug() << Pierre_De_Gaulle->Get_Vida();
 }
 
 void Nivel1::Muerte_Pierre(int Daño)
@@ -351,5 +328,40 @@ void Nivel1::Muerte_Pierre(int Daño)
         Secuencia_Animaciones(Pierre_De_Gaulle->get_Objeto_En_La_Pantalla(), 3, Pierre_De_Gaulle->get_Secuencia_Muerte());
     }else{
         Pierre_De_Gaulle->Set_Vida(Vida_Actual-Daño);
+    }
+}
+
+void Nivel1::Inicializar_Colisiones()
+{
+    Colisiones = new QTimer(this);
+    connect(Colisiones, &QTimer::timeout, this, &Nivel1::Colisiones_PersonajePrincipal);
+    connect(Colisiones, &QTimer::timeout, this, &Nivel1::Colisiones_SoldadosFranceses);
+    Colisiones->start(100);
+}
+
+void Nivel1::Muerte_Soldado_Frances(int indice)
+{
+    Secuencia_Animaciones(Soldados_Franceses_EnEscena[indice].get_Objeto_En_La_Pantalla(), 3, Soldados_Franceses_EnEscena[indice].get_Secuencia_Muerte());
+}
+
+void Nivel1::Colisiones_SoldadosFranceses()
+{
+    for (int i = 1; i < int(Soldados_Franceses_EnEscena.size()); i++) {
+        QGraphicsPixmapItem* Soldado = Soldados_Franceses_EnEscena[i].get_Objeto_En_La_Pantalla();
+        QList<QGraphicsItem*> itemsColisionados = Soldado->collidingItems();
+        QString tipoObjeto;
+        QGraphicsPixmapItem* Imagen_Colision;
+        if (!itemsColisionados.isEmpty()) {
+            for (QGraphicsItem* item : itemsColisionados) {
+                Imagen_Colision = dynamic_cast<QGraphicsPixmapItem*>(item);
+                if (Imagen_Colision) {
+                    tipoObjeto = Imagen_Colision->data(Qt::UserRole).toString();
+                    if (tipoObjeto == "Explosion") {
+                        Muerte_Soldado_Frances(i);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

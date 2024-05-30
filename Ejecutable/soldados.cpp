@@ -15,15 +15,18 @@ Soldados::Soldados(Nacionalidad nacion)
     switch (nacionalidad) {
     case Nacionalidad::Aleman:
         Vida = 100;
-        Direccion_Imagen =QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Izquierda.png");
+        //Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Parado_Izquierda.png");
         break;
     case Nacionalidad::Frances:
         Inicializar_Muerte_Franceses();
         Vida = 100;
-        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Frances_Parado_Izquierda-removebg-preview.png");
+        Agachado_Derecha = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Agachado_Derecha-removebg-preview.png");
+        Agachado_Izquierda = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Frances/Soldado_Frances_Agachado_Izquierda-removebg-preview.png");
+        Parado_Izquierda = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Frances_Parado_Izquierda-removebg-preview.png");
+        Parado_Derecha = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Frances_Parado_Derecha-removebg-preview.png");
     }
 
-    Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+    Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Parado_Izquierda);
 }
 
 Soldados::Soldados()
@@ -61,6 +64,25 @@ void Soldados::Set_Vida(int Nueva_vida)
     Vida = Nueva_vida;
 }
 
+QPixmap Soldados::Get_Imagen_Agachado_Derecha()
+{
+    return Agachado_Derecha;
+}
+
+QPixmap Soldados::Get_Imagen_Agachado_Izquierda()
+{
+    return Agachado_Izquierda;
+}
+
+QPixmap Soldados::Get_Imagen_Parado_Izquierda()
+{
+    return Parado_Izquierda;
+}
+
+QPixmap Soldados::Get_Imagen_Parado_Derecha()
+{
+    return Parado_Derecha;
+}
 
 void Soldados::Set_Direccion(Direccion Pos)
 {

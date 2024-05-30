@@ -31,7 +31,7 @@ void MainWindow::on_Iniciar_Partida_clicked()
     Fondos->Cargar_Primer_Nivel();
     Ejecucion_PrimerNivel = true;
     ui->graphicsView->setScene(Escena);
-    Primer_Nivel = new Nivel1(Escena, 5, 5);
+    Primer_Nivel = new Nivel1(Escena, 4, 5);
     Primer_Nivel->Primer_Modulo();
 }
 

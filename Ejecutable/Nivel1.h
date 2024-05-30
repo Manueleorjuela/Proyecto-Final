@@ -6,7 +6,6 @@
 #include <QPixmap>
 #include "soldados.h"
 #include "objetos.h"
-#include <vector>
 #include <QGraphicsScene>
 #include <QTimer>
 #include <QObject>
@@ -20,6 +19,7 @@ private:
     QTimer *Timer;
     QTimer *parabolicTimer;
     QTimer *Colisiones;
+    QTimer *Colisiones_Objetos_Mapa;
 
 
     // Personaje principal
@@ -80,6 +80,11 @@ private:
     //Colisiones
     void Colisiones_PersonajePrincipal();
     void Muerte_Pierre(int Daño);
+    void Inicializar_Colisiones();
+
+    //Eliminar_Aliados
+    void Muerte_Soldado_Frances(int indice);
+    void Colisiones_SoldadosFranceses();
 
 private slots:
     void Secuencia_Animaciones(QGraphicsPixmapItem* Explosion, int Frame, vector<QGraphicsPixmapItem*> Secuencia_Explosiones);
