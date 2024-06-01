@@ -1,7 +1,4 @@
 #include "nivel1.h"
-#include <algorithm>
-#include <thread>
-#include <chrono>
 
 void Nivel1::Inicializar_Franceses()
 {
@@ -141,11 +138,11 @@ Nivel1::~Nivel1()
     delete Colisiones;
     delete Colisiones_Aliados;
     delete Llegada_Alemanes;
+    delete DisparosEnemigos;
 }
 
 void Nivel1::keyPressEvent(QKeyEvent *event)
 {
-
         switch (event->key()) {
         case Qt::Key_A:
             MoverPersonaje(-2,0);
@@ -167,6 +164,9 @@ void Nivel1::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_C:
             Agachar_Personaje();
+            break;
+        case Qt::Key_L:
+            if(!Agachado) Disparo_Personaje_Principal();
             break;
         }
 }
@@ -250,13 +250,15 @@ void Nivel1::Colisiones_PersonajePrincipal()
             if (Imagen_Colision) {
                 tipoObjeto = Imagen_Colision->data(Qt::UserRole).toString();
                 if (tipoObjeto == "Explosion"){
-                    Colisiones->stop();
+                    Muerte_Pierre(50);
+                }else if(tipoObjeto == "Gas_Mostaza"){
                     Muerte_Pierre(20);
-                    QTimer::singleShot(1000, this, [this]() {
-                        Colisiones->start(100);
+                }
+                    Colisiones->stop();
+                    QTimer::singleShot(500, this, [this]() {
+                    Colisiones->start(100);
                     });
                     break;
-                }
             }
         }
     }
@@ -266,7 +268,8 @@ void Nivel1::Muerte_Pierre(int Daño)
 {
     int Vida_Actual = Pierre_De_Gaulle->Get_Vida();
     if (!Agachado)Pierre_De_Gaulle->Set_Vida(Vida_Actual-Daño);
-    if (Vida_Actual == 0){
+
+    if (Vida_Actual <= 0){
         Secuencia_Animaciones(Pierre_De_Gaulle->get_Objeto_En_La_Pantalla(), 3, Pierre_De_Gaulle->get_Secuencia_Muerte(),100);
     }
 }
@@ -277,15 +280,15 @@ void Nivel1::Inicializar_Colisiones()
     Colisiones_Aliados = new QTimer(this);
     connect(Colisiones, &QTimer::timeout, this, &Nivel1::Colisiones_PersonajePrincipal);
     connect(Colisiones_Aliados, &QTimer::timeout, this, &Nivel1::Colisiones_SoldadosFranceses);
-    Colisiones_Aliados->start(50);
-    Colisiones->start(50);
+    Colisiones_Aliados->start(100);
+    Colisiones->start(100);
 }
 
 void Nivel1::Muerte_Soldado_Frances(int indice, int Daño)
 {
     int Vida_Actual = Soldados_Franceses_EnEscena[indice].Get_Vida();
     Soldados_Franceses_EnEscena[indice].Set_Vida(Vida_Actual-Daño);
-    if (Vida_Actual == 0){
+    if (Vida_Actual < 0 or Vida_Actual == 0){
         Secuencia_Animaciones(Soldados_Franceses_EnEscena[indice].get_Objeto_En_La_Pantalla(), 3, Soldados_Franceses_EnEscena[indice].get_Secuencia_Muerte(), 100);
     }
 }
@@ -413,8 +416,8 @@ void Nivel1::Ejecutar_Movimiento_Circular()
             r = Fumigacion_Gas[k].get_Radio();
             omega = Fumigacion_Gas[k].get_Velocidad_Angular();
             num_vueltas = Fumigacion_Gas[k].get_NumVueltas();
-            double newX = x_centro + r * cos(omega * t + k * 2 * M_PI / 10);
-            double newY = y_centro + r * sin(omega * t + k * 2 * M_PI / 10);
+            double newX = x_centro + r * cos(omega * t);
+            double newY = y_centro + r * sin(omega * t);
             item->setPos(newX, newY);
         }
         t += 0.05;
@@ -424,10 +427,11 @@ void Nivel1::Ejecutar_Movimiento_Circular()
                 timer->stop();
                 timer->deleteLater();
                 Ejecutar_Movimiento_Parabolico_Gas();
+                Inicializar_Disparos_Enemigos();
             }
         }
     });
-    timer->start(20);
+    timer->start(50);
 }
 
 void Nivel1::Ejecutar_Movimiento_Parabolico_Bombas()
@@ -471,9 +475,7 @@ void Nivel1::Movimiento_Parabolico(QGraphicsPixmapItem* Objeto, QTimer* timer, d
             Secuencia_Animaciones(Efecto, 4, Efecto_Gas_Mostaza[0].Get_Secuencia_Explosiones(),500);
         }
         Objeto->scene()->removeItem(Objeto);
-        timer->stop();
-        timer->deleteLater();
-    }
+        timer->stop();    }
 }
 
 void Nivel1::Posicionar_Enemigos(int Repeticiones, int Posicion_Final, QTimer* Timer)
@@ -499,5 +501,79 @@ void Nivel1::Posicionar_Enemigos(int Repeticiones, int Posicion_Final, QTimer* T
         } else if (Repeticiones == 1) {
             Lanzamiento_Proyectiles();
         }
+    }
+}
+
+void Nivel1::Disparo_Personaje_Principal()
+{
+    Objetos Bala(Tipo::Balas);
+    QTimer *Timer_Disparo = new QTimer();
+    QGraphicsPixmapItem *item;
+    item = Bala.Get_Objeto();
+    item->setScale(0.1);
+    item->setPos(Pierre_De_Gaulle->get_Objeto_En_La_Pantalla()->x() - 60, Pierre_De_Gaulle->get_Objeto_En_La_Pantalla()->y() - 38);
+    Nivel->addItem(item);
+    double vx = -Bala.Velocidad_X();
+    double x0 = item->x();
+    double t = 0;
+
+    connect(Timer_Disparo, &QTimer::timeout, this, [=]() mutable {
+        Movimiento_Rectilineo_Disparos(item, Timer_Disparo, vx, x0, t);
+        t += 0.005;
+    });
+    Timer_Disparo->start(5);
+}
+
+void Nivel1::Disparos_Enemigos()
+{
+    for (int i = 0; i < Cantidad_Soldados_Alemanes; i++){
+        if(Probabilidadi_Para_Disparos_Enemigos()){
+            Objetos Bala(Tipo::Balas);
+            QTimer *Timer_Disparo = new QTimer();
+            QGraphicsPixmapItem *item;
+            item = Bala.Get_Objeto();
+            item->setScale(0.1);
+            item->setPos(Soldados_Alemanes_EnEscena[i].get_Objeto_En_La_Pantalla()->x() - 60, Soldados_Alemanes_EnEscena[i].get_Objeto_En_La_Pantalla()->y() - 38);
+            Nivel->addItem(item);
+            double vx = Bala.Velocidad_X();
+            double x0 = item->x();
+            double t = 0;
+            connect(Timer_Disparo, &QTimer::timeout, this, [=]() mutable {
+                Movimiento_Rectilineo_Disparos(item, Timer_Disparo, vx, x0, t);
+                t += 0.005;
+            });
+            Timer_Disparo->start(5);
+        }
+    }
+}
+
+void Nivel1::Inicializar_Disparos_Enemigos()
+{
+    DisparosEnemigos = new QTimer();
+    connect(DisparosEnemigos, &QTimer::timeout, this, &Nivel1::Disparos_Enemigos);
+    DisparosEnemigos->start(1000);
+}
+
+bool Nivel1::Probabilidadi_Para_Disparos_Enemigos()
+{
+    double probabilityTrue = 0.7;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0.0, 1.0);
+    if (dis(gen) < probabilityTrue) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void Nivel1::Movimiento_Rectilineo_Disparos(QGraphicsPixmapItem *Bala, QTimer *timer, double v0, double x0, double t)
+{
+    double newX = x0 + v0 * t;
+    Bala->setPos(newX, Bala->y());
+    if (newX > Nivel->width() || newX < 0) {
+        timer->stop();
+        Nivel->removeItem(Bala);
+        delete Bala;
     }
 }

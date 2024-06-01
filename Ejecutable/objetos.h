@@ -35,6 +35,10 @@ private:
     //Asignacion aleatoria de las velocidades
     int generarNumeroAleatorio(int, int);
 
+    //Para las balas
+    QPixmap Bala;
+
+
 public:
 
     double Velocidad_X();
@@ -48,6 +52,8 @@ public:
     double get_Velocidad_Angular();
     double get_Radio();
     double get_NumVueltas();
+
+    void Oricntacion_Imagen(QPixmap Dir_);
 
     vector <QGraphicsPixmapItem*> Get_Secuencia_Explosiones();
 

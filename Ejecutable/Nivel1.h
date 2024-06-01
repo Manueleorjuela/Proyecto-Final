@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QObject>
 #include <QKeyEvent>
+#include <algorithm>
 
 class Nivel1 : public QGraphicsScene
 {
@@ -17,10 +18,10 @@ class Nivel1 : public QGraphicsScene
 private:
     QGraphicsScene *Nivel;
     QTimer *Timer;
-    //QTimer *parabolicTimer;
     QTimer *Colisiones;
     QTimer *Colisiones_Aliados;
     QTimer *Llegada_Alemanes;
+    QTimer *DisparosEnemigos;
 
     // Personaje principal
     vector<Soldados> Soldados_Franceses_EnEscena;
@@ -103,7 +104,12 @@ private:
     void Ejecutar_Movimiento_Parabolico_Gas();
 
     //Iniciar_Tiroteo
+    void Disparo_Personaje_Principal();
 
+    //Avance_Enemigo
+    void Disparos_Enemigos();
+    void Inicializar_Disparos_Enemigos();
+    bool Probabilidadi_Para_Disparos_Enemigos();
 
 private slots:
 
@@ -111,6 +117,7 @@ private slots:
     void Posicionar_Enemigos(int Repeticiones, int Posicion_Final, QTimer* Timer);
     void Secuencia_Animaciones(QGraphicsPixmapItem* Explosion, int Frame, vector<QGraphicsPixmapItem*> Secuencia_Explosiones, int Timer);
     void Movimiento_Parabolico(QGraphicsPixmapItem* Proyectil, QTimer* timer, double x0, double y0, double vx, double vy, double t, int Limite, QGraphicsPixmapItem* Explosion, int Case, double Escala);
+    void Movimiento_Rectilineo_Disparos(QGraphicsPixmapItem* Bala, QTimer* timer, double v0, double x0, double t0);
 
 public:
     //Constructor

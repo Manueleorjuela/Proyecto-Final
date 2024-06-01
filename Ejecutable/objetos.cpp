@@ -54,7 +54,9 @@ Objetos::Objetos(Tipo Clasificacion)
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
         break;
     case Tipo::Balas:
-        // Inicializar para Balas
+        velocidadenX = 1000;
+        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Bala.png");
+        Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
         break;
     case Tipo::Gas_Mostaza:
         for (int i = 5; i > 0; i--){
@@ -75,9 +77,8 @@ Objetos::Objetos(Tipo Clasificacion)
         velocidadenX = generarNumeroAleatorio(45,52);
         velocidadenY = -(generarNumeroAleatorio(45,52));
         Punto_Explosion = generarNumeroAleatorio(0,10);
-
         //Para el movimiento circular
-        Velocidad_Angular = generarNumeroAleatorio(10,15);
+        Velocidad_Angular = generarNumeroAleatorio(10,10);
         Radio = generarNumeroAleatorio(2,4);
         Num_Vueltas = generarNumeroAleatorio(3,5);
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
@@ -99,6 +100,11 @@ double Objetos::get_Radio()
 double Objetos::get_NumVueltas()
 {
     return Num_Vueltas;
+}
+
+void Objetos::Oricntacion_Imagen(QPixmap Dir_)
+{
+    Direccion_Imagen = Dir_;
 }
 
 vector<QGraphicsPixmapItem *> Objetos::Get_Secuencia_Explosiones()
