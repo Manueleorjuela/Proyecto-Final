@@ -17,11 +17,14 @@ class Nivel1 : public QGraphicsScene
     Q_OBJECT
 private:
     QGraphicsScene *Nivel;
+    //Timers
     QTimer *Timer;
     QTimer *Colisiones;
     QTimer *Colisiones_Aliados;
+    QTimer *Colisiones_Enemigos;
     QTimer *Llegada_Alemanes;
     QTimer *DisparosEnemigos;
+    QTimer *Movimiento_Enemigos;
 
     // Personaje principal
     vector<Soldados> Soldados_Franceses_EnEscena;
@@ -81,13 +84,11 @@ private:
     void Inicializar_Explosiones();
 
     //Colisiones
-    void Colisiones_PersonajePrincipal();
     void Muerte_Pierre(int Daño);
     void Inicializar_Colisiones();
 
     //Eliminar_Aliados
-    void Muerte_Soldado_Frances(int indice, int Daño);
-    void Colisiones_SoldadosFranceses();
+    void Muerte_Soldados_Grupo(Soldados *&Soldado, int Daño);
 
     //Segundo Modulo
     void Inicializar_Soldados_Alemanes();
@@ -108,10 +109,18 @@ private:
 
     //Avance_Enemigo
     void Disparos_Enemigos();
-    void Inicializar_Disparos_Enemigos();
+    void Avance_Enemigos();
+    void Inicializar_Dinamicas_Enemigos();
     bool Probabilidadi_Para_Disparos_Enemigos();
 
+
 private slots:
+
+    //Colisiones
+    void Colisiones_SoldadosAlemanes();
+    void Colisiones_PersonajePrincipal();
+    void Colisiones_SoldadosFranceses();
+
 
     void Ejecutar_Movimiento_Circular();
     void Posicionar_Enemigos(int Repeticiones, int Posicion_Final, QTimer* Timer);

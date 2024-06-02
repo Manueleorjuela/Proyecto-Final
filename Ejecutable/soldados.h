@@ -36,6 +36,9 @@ class Soldados
     void Inicializar_Muerte_Franceses();
     void Inicializar_Muerte_Alemanes();
 
+    //Estado
+    bool Vivo;
+
 public:
     Soldados(Nacionalidad nacion);
     Soldados();
@@ -55,6 +58,9 @@ public:
 
     void Set_Direccion(Direccion Pos);
     Direccion Get_Direccion();
+
+    bool Get_Vivo();
+    void Set_Vivo(bool Estado);
 
     ~Soldados();
 

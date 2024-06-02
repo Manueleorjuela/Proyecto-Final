@@ -54,7 +54,7 @@ Objetos::Objetos(Tipo Clasificacion)
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
         break;
     case Tipo::Balas:
-        velocidadenX = 1000;
+        velocidadenX = 1200;
         Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Bala.png");
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
         break;

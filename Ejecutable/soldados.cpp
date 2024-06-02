@@ -23,7 +23,7 @@ Soldados::Soldados(Nacionalidad nacion)
 {
     switch (nacionalidad) {
     case Nacionalidad::Aleman:
-        Inicializar_Muerte_Franceses();
+        Inicializar_Muerte_Alemanes();
         Vida = 100;
         Agachado_Derecha = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Aleman_Agachado_Derecha-removebg-preview.png");
         Agachado_Izquierda = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Aleman_Agachado_Izquierda-removebg-preview.png");
@@ -41,6 +41,7 @@ Soldados::Soldados(Nacionalidad nacion)
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Parado_Izquierda);
         break;
     }
+    Vivo = true;
 }
 
 Soldados::Soldados()
@@ -106,6 +107,16 @@ void Soldados::Set_Direccion(Direccion Pos)
 Direccion Soldados::Get_Direccion()
 {
     return Orientacion;
+}
+
+bool Soldados::Get_Vivo()
+{
+    return Vivo;
+}
+
+void Soldados::Set_Vivo(bool Estado)
+{
+    Vivo = Estado;
 }
 
 Soldados::~Soldados()
