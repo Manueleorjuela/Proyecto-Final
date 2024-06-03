@@ -27,9 +27,13 @@ void Niveles::Cargar_Primer_Nivel()
 
 void Niveles::Cargar_Segundo_Nivel()
 {
-    Direccion_Fondo = ":/Escenas/Imagenes_Proyecto/Fondos/Segundo nivel_.png";;
+
+    Direccion_Fondo = "C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Fondos/Segundo nivel.png";
     Pixmap = new QPixmap(Direccion_Fondo);
     Escena->addPixmap(*Pixmap);
+    PixmapAjustado = Pixmap->scaled(798, 598, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    Escena->addPixmap(PixmapAjustado);
+    Pixmap = nullptr;
 }
 
 void Niveles::Remover_Fondo()

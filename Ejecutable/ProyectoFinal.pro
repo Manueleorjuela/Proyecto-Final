@@ -12,6 +12,7 @@ SOURCES += \
     Nivel1.cpp \
     main.cpp \
     mainwindow.cpp \
+    nivel2.cpp \
     niveles.cpp \
     objetos.cpp \
     soldados.cpp
@@ -19,6 +20,7 @@ SOURCES += \
 HEADERS += \
     Nivel1.h \
     mainwindow.h \
+    nivel2.h \
     niveles.h \
     objetos.h \
     soldados.h

@@ -12,7 +12,7 @@ void Soldados::Inicializar_Muerte_Franceses()
 void Soldados::Inicializar_Muerte_Alemanes()
 {
     for (int i = 4; i > 0; i--){
-        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Aleman_Mueriendo_Momento" + QString::number(i) + "-removebg-preview.png");
+        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Soldados/Aleman/Soldado_Aleman_Muriendo_Momento" + QString::number(i) + "-removebg-preview.png");
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
         Secuencia_Muerte.push_back(Objeto_En_La_Pantalla);
     }

@@ -18,6 +18,7 @@ class Nivel1 : public QGraphicsScene
 private:
     QGraphicsScene *Nivel;
     //Timers
+    QTimer *Ejecucion_Nivel;
     QTimer *Timer;
     QTimer *Colisiones;
     QTimer *Colisiones_Aliados;
@@ -74,9 +75,6 @@ private:
     vector<Objetos> Proyectiles_Ronda;
     void Ubicar_Proyectiles();
     void Ejecutar_Movimiento_Parabolico_Bombas();
-    int  Numero_Bomba;
-    //int Numero_Ronda;
-    //QTimer *Timer_Ronda;
     void Inicializar_Proyectiles();
 
     //Ejecucion explosion
@@ -113,14 +111,19 @@ private:
     void Inicializar_Dinamicas_Enemigos();
     bool Probabilidadi_Para_Disparos_Enemigos();
 
+    //Saber si el nivel termina o no
+    void Inicializar_Ejecucion();
+    bool Ganar;
+    bool Termino_Nivel;
 
 private slots:
+
+    void Terminar_Nivel();
 
     //Colisiones
     void Colisiones_SoldadosAlemanes();
     void Colisiones_PersonajePrincipal();
     void Colisiones_SoldadosFranceses();
-
 
     void Ejecutar_Movimiento_Circular();
     void Posicionar_Enemigos(int Repeticiones, int Posicion_Final, QTimer* Timer);
@@ -130,12 +133,13 @@ private slots:
 
 public:
     //Constructor
-    Nivel1(QGraphicsScene *&Fondo, int Cant_Franceses, int Cant_Cañones_Alemanes, int Cant_Soldados_Alemanes);
+    Nivel1(QGraphicsScene *&Fondo);
     //Movimiento
     void keyPressEvent(QKeyEvent *event) override;
     void Primer_Modulo();
     void Segundo_Modulo();
-
+    bool get_Ganar();
+    bool get_TerminoNivel();
     ~Nivel1();
 };
 
