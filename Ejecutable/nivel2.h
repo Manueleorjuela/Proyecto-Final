@@ -24,6 +24,7 @@ private slots:
     void Movimiento_Parabolico(QGraphicsPixmapItem *Objeto, QTimer *timer, double x0, double y0, double vx, double vy, double t);
     void Movimiento_Armonico_Simple(QGraphicsPixmapItem *Objeto, QTimer *timer, double x0, double y0, double amplitud_x, double frecuencia_x, double velocidad_y, double t, double Limite);
     void Secuencia_Animaciones(QGraphicsPixmapItem* Explosion, int Frame, vector<QGraphicsPixmapItem*> Secuencia_Explosiones, int Timer, int Case);
+    void Movimiento_Rectilineo_Disparos(QGraphicsPixmapItem *Objeto, QTimer *timer, double v0, double x0, double t);
 
 private:
     //Escenas
@@ -37,6 +38,9 @@ private:
     //Para manejar objetos de la escena
     QGraphicsPixmapItem *item;
 
+    //Colisiones
+    void Inicializar_TodasLas_Colisiones();
+
     //Personaje principal
     Soldados Adolfo;
     void Ubicar_PersonajePrincipal();
@@ -45,6 +49,8 @@ private:
     void Ubicar_Personaje_Izquierda();
     void Ubicar_Personaje_Derecha();
     void Agachar_Personaje();
+    void Colisiones_Personaje_Principal();
+    QTimer *Colisiones_Personaje;
 
     //Para las bengalas y bombas
     void Lanzar_Bengalas();
@@ -54,6 +60,10 @@ private:
     vector<Objetos> Ametralladoras_EnEscena;
     void Inicializar_Ametralladoras();
     void Ubicar_Ametralladoras();
+    bool Probabilidad_Disparos();
+    void Disparos_Ametralladora();
+    void Inicializar_Disparos();
+    QTimer* Disparos;
 
     ~Nivel2();
 };

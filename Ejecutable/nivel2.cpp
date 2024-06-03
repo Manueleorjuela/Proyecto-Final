@@ -84,6 +84,32 @@ void Nivel2::Agachar_Personaje()
     Adolfo.get_Objeto_En_La_Pantalla()->setPixmap(nuevaImagen);
 }
 
+void Nivel2::Colisiones_Personaje_Principal()
+{
+    QGraphicsPixmapItem* Pantalla = Adolfo.get_Objeto_En_La_Pantalla();
+    QList<QGraphicsItem*> itemsColisionados = Pantalla->collidingItems();
+    QString tipoObjeto;
+    QGraphicsPixmapItem* Imagen_Colision;
+
+    if (!itemsColisionados.isEmpty()) {
+        for (QGraphicsItem* item : itemsColisionados) {
+            Imagen_Colision = dynamic_cast<QGraphicsPixmapItem*>(item);
+            if (Imagen_Colision) {
+                tipoObjeto = Imagen_Colision->data(Qt::UserRole).toString();
+                if (tipoObjeto == "Bala") {
+                    qDebug() << "IMPACTADO POR UNA BALA, NO JODA";
+                }
+                Colisiones_Personaje->stop();
+                QTimer::singleShot(500, this, [this]() {
+                Colisiones_Personaje->start(100);
+                });
+                break;
+            }
+        }
+        itemsColisionados.clear();
+    }
+}
+
 void Nivel2::Lanzar_Bengalas()
 {
     Objetos Bengala(Tipo::Bengala);
@@ -160,6 +186,7 @@ void Nivel2::Movimiento_Armonico_Simple(QGraphicsPixmapItem *Objeto, QTimer *tim
         item->setPos(newX, newY);
         item->setScale(0.4);
         Nivel->removeItem(Objeto);
+        item->setData(Qt::UserRole, "Explosion");
         timer->stop();
         timer->deleteLater();
         Secuencia_Animaciones(item, 4, Explosion.Get_Secuencia_Explosiones(), 100, 0);
@@ -184,6 +211,25 @@ void Nivel2::Secuencia_Animaciones(QGraphicsPixmapItem* Imagen, int frame, vecto
         }
     });
     animTimer->start(Timer);
+}
+
+void Nivel2::Movimiento_Rectilineo_Disparos(QGraphicsPixmapItem *Objeto, QTimer *timer, double v0, double x0, double t)
+{
+    double newX = x0 + v0 * t;
+    Objeto->setPos(newX, Objeto->y());
+    if (newX > Nivel->width() || newX < 0) {
+        timer->stop();
+        Nivel->removeItem(Objeto);
+        delete Objeto;
+        timer->deleteLater();
+    }
+}
+
+void Nivel2::Inicializar_TodasLas_Colisiones()
+{
+    Colisiones_Personaje = new QTimer(this);
+    connect(Colisiones_Personaje, &QTimer::timeout, this, &Nivel2::Colisiones_Personaje_Principal);
+    Colisiones_Personaje->start(50);
 }
 void Nivel2::keyPressEvent(QKeyEvent *event)
 {
@@ -237,10 +283,56 @@ void Nivel2::Ubicar_Ametralladoras()
     }
 }
 
+bool Nivel2::Probabilidad_Disparos()
+{
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_real_distribution<> dis(0.0, 1.0);
+    double probabilityTrue = 0.8;
+    return dis(gen) < probabilityTrue;
+}
+
+void Nivel2::Disparos_Ametralladora()
+{
+    Objetos *Ametralladora_Actual;
+    for (int i = 0; i < int(Ametralladoras_EnEscena.size()); i++){
+        Ametralladora_Actual = &Ametralladoras_EnEscena[i];
+        if (Ametralladora_Actual->Get_Durabilidad_Ametralladoras() != 0){
+            if(Probabilidad_Disparos()){
+                Objetos Bala(Tipo::Balas);
+                QTimer *Timer_Disparo = new QTimer();
+                QGraphicsPixmapItem *item;
+                item = Bala.Get_Objeto();
+                item->setScale(0.2);
+                item->setPos(Ametralladora_Actual->Get_Objeto()->x()-20, Ametralladora_Actual->Get_Objeto()->y()+12);
+                item->setData(Qt::UserRole, "Bala");
+                Nivel->addItem(item);
+                double vx = -100;
+                double x0 = item->x();
+                double t = 0;
+                connect(Timer_Disparo, &QTimer::timeout, this, [=]() mutable {
+                    Movimiento_Rectilineo_Disparos(item, Timer_Disparo, vx, x0, t);
+                    t += 0.05;
+                });
+                Timer_Disparo->start(10);
+            }
+        }
+    }
+}
+
+void Nivel2::Inicializar_Disparos()
+{
+    Disparos = new QTimer(this);
+    connect(Disparos, &QTimer::timeout, this, &Nivel2::Disparos_Ametralladora);
+    Disparos->start(750);
+}
+
 void Nivel2::Modulo()
 {
     Ubicar_Ametralladoras();
     Ubicar_PersonajePrincipal();
+    Inicializar_Disparos();
+    Inicializar_TodasLas_Colisiones();
 }
 
 Nivel2::~Nivel2()

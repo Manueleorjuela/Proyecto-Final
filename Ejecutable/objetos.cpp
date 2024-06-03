@@ -86,6 +86,7 @@ Objetos::Objetos(Tipo Clasificacion)
     case Tipo::Ametralladoras:
         Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Ametralladora_Francesa.png");
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+        Durabilidad = 100;
         break;
     case Tipo::Bengala:
         Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Bengala.png");
