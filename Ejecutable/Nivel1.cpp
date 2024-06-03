@@ -467,6 +467,7 @@ void Nivel1::Ejecutar_Movimiento_Circular()
 void Nivel1::Ejecutar_Movimiento_Parabolico_Bombas()
 {
     for (int i = 0; i < int(Proyectiles_Ronda.size()); ++i) {
+
         QTimer* timer = new QTimer(this); // Declara el temporizador dentro del bucle
         QGraphicsPixmapItem* item = nullptr;
         QGraphicsPixmapItem* Explosion = nullptr;
@@ -480,6 +481,7 @@ void Nivel1::Ejecutar_Movimiento_Parabolico_Bombas()
         Explosion = Explosiones[i].Get_Objeto(); // PARA EL EFECTO
         double x0 = item->x();
         double y0 = item->y();
+
         connect(timer, &QTimer::timeout, this, [=]() mutable {
             static double t = 0;
             Movimiento_Parabolico(item, timer, x0, y0, vx, vy, t, Limite_, Explosion, 1, 0.7);

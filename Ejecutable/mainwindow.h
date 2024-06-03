@@ -38,11 +38,12 @@ private:
     QTimer* Cambio_Nivel;
     Ui::MainWindow *ui;
     Nivel1 *Primer_Nivel;
+    Nivel2 *Segundo_Nivel;
     bool Ejecucion_PrimerNivel;
     bool Ejecucion_SegundoNivel;
 
     void Primer_Nivel_();
-    void Segundo_Nivel();
+    void Segundo_Nivel_();
 
     void Inicializar_Cambio_Nivel();
     bool Nivel1_Completado;

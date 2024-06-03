@@ -32,7 +32,8 @@ MainWindow::~MainWindow()
 void MainWindow::on_Iniciar_Partida_clicked()
 {
     ui->Menu->hide();
-    Primer_Nivel_();
+    //Primer_Nivel_();
+    Segundo_Nivel_();
 }
 
 void MainWindow::on_Salir_clicked()
@@ -51,7 +52,7 @@ void MainWindow::Nivel1_Completado_()
         if (!Nivel1_Ganado) {
             Volver_A_Intentar_Nivel();
         } else {
-            Segundo_Nivel();
+            Segundo_Nivel_();
         }
     }
 }
@@ -68,12 +69,14 @@ void MainWindow::Primer_Nivel_()
     Inicializar_Cambio_Nivel();
 }
 
-void MainWindow::Segundo_Nivel()
+void MainWindow::Segundo_Nivel_()
 {
     Fondos->Cargar_Segundo_Nivel();
     Ejecucion_PrimerNivel = false;
     Ejecucion_SegundoNivel = true;
     ui->graphicsView->setScene(Escena);
+    Segundo_Nivel = new Nivel2(Escena);
+    Segundo_Nivel->Modulo();
 
 }
 
@@ -94,8 +97,11 @@ void MainWindow::Volver_A_Intentar_Nivel()
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    if (Ejecucion_PrimerNivel && Primer_Nivel) {
+    if (Ejecucion_PrimerNivel && !Ejecucion_SegundoNivel) {
         Primer_Nivel->keyPressEvent(event);
+    }
+    if(Ejecucion_SegundoNivel && !Ejecucion_PrimerNivel){
+        Segundo_Nivel->keyPressEvent(event);
     }
 }
 

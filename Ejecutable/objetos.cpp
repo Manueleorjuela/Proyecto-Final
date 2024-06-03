@@ -82,6 +82,22 @@ Objetos::Objetos(Tipo Clasificacion)
         Radio = generarNumeroAleatorio(2,4);
         Num_Vueltas = generarNumeroAleatorio(3,5);
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+    case Tipo::Ametralladoras:
+        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Ametralladora_Francesa.png");
+        Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+        break;
+    case Tipo::Bengala:
+        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Señal_Humo.png");
+        velocidadenX = generarNumeroAleatorio(45,52);
+        velocidadenY = -(generarNumeroAleatorio(45,52));
+        Punto_Explosion = generarNumeroAleatorio(0,10);
+        Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+    case Tipo::Señal_Humo:
+        for (int i = 5; i > 0; i--){
+            Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Efectos/Efectos/Humo/Señal_Humo_Momento" + QString::number(i) + ".png");
+            Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+            Secuencia_Explosiones.push_back(Objeto_En_La_Pantalla);
+        }
     default:
         break;
     }

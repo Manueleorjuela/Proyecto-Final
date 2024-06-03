@@ -14,7 +14,11 @@ enum class Tipo{
     Balas,
     Gas_Mostaza,
     Explosion,
-    Gas};
+    Gas,
+    Ametralladoras,
+    Bengala,
+    Señal_Humo,
+};
 
 class Objetos
 {

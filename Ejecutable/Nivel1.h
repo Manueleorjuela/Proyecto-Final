@@ -136,8 +136,11 @@ public:
     Nivel1(QGraphicsScene *&Fondo);
     //Movimiento
     void keyPressEvent(QKeyEvent *event) override;
+    //Modulos
     void Primer_Modulo();
     void Segundo_Modulo();
+
+    //Estado del nivel
     bool get_Ganar();
     bool get_TerminoNivel();
     ~Nivel1();
