@@ -51,6 +51,7 @@ private:
     void Agachar_Personaje();
     void Colisiones_Personaje_Principal();
     QTimer *Colisiones_Personaje;
+    void Muerte_Adolfo(int Daño);
 
     //Para las bengalas y bombas
     void Lanzar_Bengalas();
@@ -64,6 +65,18 @@ private:
     void Disparos_Ametralladora();
     void Inicializar_Disparos();
     QTimer* Disparos;
+    void Colisiones_Ametralladoras();
+    QTimer *Colisiones_Ametralladoras_;
+    void Daño_Ametralladoras(int Daño, Objetos *Ametralladora);
+
+    //Estado del nivel
+    QTimer *Ejecucion_Nivel;
+    void Inicializar_Ejecucion();
+    void Validar_Estados();
+    bool Ganar;
+    bool Terminar;
+    bool get_Ganar();
+    bool get_Terminar();
 
     ~Nivel2();
 };

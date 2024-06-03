@@ -6,6 +6,8 @@ Nivel2::Nivel2(QGraphicsScene *&Fondo)
     Inicializar_Ametralladoras();
     Adolfo = Nacionalidad::Aleman;
     Agachado = false;
+    Ganar = false;
+    Terminar = false;
 }
 
 //Personaje principal
@@ -97,7 +99,7 @@ void Nivel2::Colisiones_Personaje_Principal()
             if (Imagen_Colision) {
                 tipoObjeto = Imagen_Colision->data(Qt::UserRole).toString();
                 if (tipoObjeto == "Bala") {
-                    qDebug() << "IMPACTADO POR UNA BALA, NO JODA";
+                    Muerte_Adolfo(100);
                 }
                 Colisiones_Personaje->stop();
                 QTimer::singleShot(500, this, [this]() {
@@ -107,6 +109,19 @@ void Nivel2::Colisiones_Personaje_Principal()
             }
         }
         itemsColisionados.clear();
+    }
+}
+
+void Nivel2::Muerte_Adolfo(int Daño)
+{
+    int Vida_Actual = Adolfo.Get_Vida();
+    int Nueva_Vida = Vida_Actual - Daño;
+    if (!Agachado){
+        Adolfo.Set_Vida(Vida_Actual-Daño);
+            if (Nueva_Vida <= 0){
+            Secuencia_Animaciones(Adolfo.get_Objeto_En_La_Pantalla(), 3, Adolfo.get_Secuencia_Muerte(), 300,0);
+            Adolfo.Set_Vivo(false);
+        }
     }
 }
 
@@ -159,7 +174,6 @@ void Nivel2::Lanzar_Bombardeo(double Posicion_X, double Posicion_Y)
     item->setScale(0.05);
     item->setPos(Posicion_X+40, 0);
     Nivel->addItem(item);
-
     double t = 0;
     double amplitud_x = 20;
     double frecuencia_x = 1;
@@ -229,7 +243,11 @@ void Nivel2::Inicializar_TodasLas_Colisiones()
 {
     Colisiones_Personaje = new QTimer(this);
     connect(Colisiones_Personaje, &QTimer::timeout, this, &Nivel2::Colisiones_Personaje_Principal);
+    Colisiones_Ametralladoras_ = new QTimer(this);
+    connect(Colisiones_Ametralladoras_, &QTimer::timeout, this, &Nivel2::Colisiones_Ametralladoras);
     Colisiones_Personaje->start(50);
+    Colisiones_Ametralladoras_->start(50);
+
 }
 void Nivel2::keyPressEvent(QKeyEvent *event)
 {
@@ -307,7 +325,7 @@ void Nivel2::Disparos_Ametralladora()
                 item->setPos(Ametralladora_Actual->Get_Objeto()->x()-20, Ametralladora_Actual->Get_Objeto()->y()+12);
                 item->setData(Qt::UserRole, "Bala");
                 Nivel->addItem(item);
-                double vx = -100;
+                double vx = -180;
                 double x0 = item->x();
                 double t = 0;
                 connect(Timer_Disparo, &QTimer::timeout, this, [=]() mutable {
@@ -324,7 +342,81 @@ void Nivel2::Inicializar_Disparos()
 {
     Disparos = new QTimer(this);
     connect(Disparos, &QTimer::timeout, this, &Nivel2::Disparos_Ametralladora);
-    Disparos->start(750);
+    Disparos->start(1000);
+}
+
+void Nivel2::Colisiones_Ametralladoras()
+{
+    for (int i = 0; i < int(Ametralladoras_EnEscena.size()); i++){
+        if (Ametralladoras_EnEscena[i].Get_Durabilidad_Ametralladoras() != 0){
+            Objetos *Actual = &Ametralladoras_EnEscena[i];
+            QGraphicsPixmapItem* Pantalla = Ametralladoras_EnEscena[i].Get_Objeto();
+            QList<QGraphicsItem*> itemsColisionados = Pantalla->collidingItems();
+            QString tipoObjeto;
+            QGraphicsPixmapItem* Imagen_Colision;
+            if (!itemsColisionados.isEmpty()) {
+                for (QGraphicsItem* item : itemsColisionados) {
+                    Imagen_Colision = dynamic_cast<QGraphicsPixmapItem*>(item);
+                    if (Imagen_Colision) {
+                        tipoObjeto = Imagen_Colision->data(Qt::UserRole).toString();
+                        if (tipoObjeto == "Explosion") {
+                            Daño_Ametralladoras(25, Actual);
+                        }
+                        Colisiones_Ametralladoras_->stop();
+                        QTimer::singleShot(500, this, [this]() {
+                        Colisiones_Ametralladoras_->start(100);
+                        });
+                        break;
+                    }
+                }
+                itemsColisionados.clear();
+            }
+        }
+    }
+}
+
+void Nivel2::Daño_Ametralladoras(int Daño, Objetos *Ametralladoras)
+{
+    int Nueva_Durabilidad = Ametralladoras->Get_Durabilidad_Ametralladoras() - Daño;
+    Ametralladoras->Set_Durabilidad_Ametralladoras(Nueva_Durabilidad);
+    if(Nueva_Durabilidad == 0){
+        Nivel->removeItem(Ametralladoras->Get_Objeto());
+    }
+}
+
+void Nivel2::Inicializar_Ejecucion()
+{
+    Ejecucion_Nivel = new QTimer();
+    connect(Ejecucion_Nivel, &QTimer::timeout, this, &Nivel2::Validar_Estados);
+    Ejecucion_Nivel->start(100);
+
+}
+
+void Nivel2::Validar_Estados()
+{
+    int Ametralladoras_Destruidas = 0;
+    for (int i = 0; i < int(Ametralladoras_EnEscena.size()); i++){
+        if (Ametralladoras_EnEscena[i].Get_Durabilidad_Ametralladoras() == 0){
+            Ametralladoras_Destruidas++;
+        }
+        if(Adolfo.Get_Vivo() == false){
+            Terminar = true;
+        }
+    }
+    if (Ametralladoras_Destruidas == int(Ametralladoras_EnEscena.size())){
+        Ganar = true;
+        Terminar = true;
+    }
+}
+
+bool Nivel2::get_Ganar()
+{
+    return Ganar;
+}
+
+bool Nivel2::get_Terminar()
+{
+    return Terminar;
 }
 
 void Nivel2::Modulo()
@@ -333,6 +425,7 @@ void Nivel2::Modulo()
     Ubicar_PersonajePrincipal();
     Inicializar_Disparos();
     Inicializar_TodasLas_Colisiones();
+    Inicializar_Ejecucion();
 }
 
 Nivel2::~Nivel2()
