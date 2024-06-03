@@ -42,6 +42,8 @@ private:
     //Para las balas
     QPixmap Bala;
 
+    //Para las ametralladoras
+    int Durabilidad;
 
 public:
 
@@ -61,6 +63,8 @@ public:
 
     vector <QGraphicsPixmapItem*> Get_Secuencia_Explosiones();
 
+    void Set_Durabilidad_Ametralladoras(int Nueva_Durabilidad);
+    int Get_Durabilidad_Ametralladoras();
 
 };
 

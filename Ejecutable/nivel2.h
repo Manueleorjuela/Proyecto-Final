@@ -20,7 +20,10 @@ public:
     void Modulo();
 
 private slots:
-    void Movimiento_Parabolico(QGraphicsPixmapItem *Objeto, QTimer *timer, double x0, double y0, double vx, double vy, double t, double Limite);
+
+    void Movimiento_Parabolico(QGraphicsPixmapItem *Objeto, QTimer *timer, double x0, double y0, double vx, double vy, double t);
+    void Movimiento_Armonico_Simple(QGraphicsPixmapItem *Objeto, QTimer *timer, double x0, double y0, double amplitud_x, double frecuencia_x, double velocidad_y, double t, double Limite);
+    void Secuencia_Animaciones(QGraphicsPixmapItem* Explosion, int Frame, vector<QGraphicsPixmapItem*> Secuencia_Explosiones, int Timer, int Case);
 
 private:
     //Escenas
@@ -43,9 +46,9 @@ private:
     void Ubicar_Personaje_Derecha();
     void Agachar_Personaje();
 
-    //Para las bengalas
+    //Para las bengalas y bombas
     void Lanzar_Bengalas();
-
+    void Lanzar_Bombardeo(double Posicion_X, double Posicion_Y);
 
     //Ametralladoras
     vector<Objetos> Ametralladoras_EnEscena;

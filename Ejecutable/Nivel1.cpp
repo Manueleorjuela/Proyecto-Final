@@ -423,12 +423,12 @@ void Nivel1::Ejecutar_Movimiento_Parabolico_Gas()
         Explosion = Efecto_Gas_Mostaza[i].Get_Objeto(); // PARA EL EFECTO
         double x0 = item->x();
         double y0 = item->y();
+        double t = 0;
         connect(timer, &QTimer::timeout, this, [=]() mutable {
-            static double t = 0;
             Movimiento_Parabolico(item, timer, x0, y0, vx, vy, t, Limite_, Explosion, 2, 1.2);
-            t += 0.0005;
+            t += 0.05;
         });
-        timer->start(1);
+        timer->start(10);
     }
 }
 

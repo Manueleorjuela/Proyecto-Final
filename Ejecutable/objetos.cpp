@@ -82,22 +82,24 @@ Objetos::Objetos(Tipo Clasificacion)
         Radio = generarNumeroAleatorio(2,4);
         Num_Vueltas = generarNumeroAleatorio(3,5);
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+        break;
     case Tipo::Ametralladoras:
         Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Ametralladora_Francesa.png");
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
         break;
     case Tipo::Bengala:
-        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Señal_Humo.png");
-        velocidadenX = generarNumeroAleatorio(45,52);
-        velocidadenY = -(generarNumeroAleatorio(45,52));
-        Punto_Explosion = generarNumeroAleatorio(0,10);
+        Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Objetos/Bengala.png");
+        velocidadenX = generarNumeroAleatorio(30,52);
+        velocidadenY = -(generarNumeroAleatorio(30,52));
         Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
+        break;
     case Tipo::Señal_Humo:
         for (int i = 5; i > 0; i--){
-            Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Efectos/Efectos/Humo/Señal_Humo_Momento" + QString::number(i) + ".png");
+            Direccion_Imagen = QPixmap("C:/Users/UsuarioCS/OneDrive/Documentos/ProyectoFinal/Imagenes_Proyecto/Efectos/Humo/Señal_Humo_Momento" + QString::number(i) + ".png");
             Objeto_En_La_Pantalla = new QGraphicsPixmapItem(Direccion_Imagen);
             Secuencia_Explosiones.push_back(Objeto_En_La_Pantalla);
         }
+        break;
     default:
         break;
     }
@@ -126,6 +128,16 @@ void Objetos::Oricntacion_Imagen(QPixmap Dir_)
 vector<QGraphicsPixmapItem *> Objetos::Get_Secuencia_Explosiones()
 {
     return Secuencia_Explosiones;
+}
+
+void Objetos::Set_Durabilidad_Ametralladoras(int Nueva_Durabilidad)
+{
+    Durabilidad = Nueva_Durabilidad;
+}
+
+int Objetos::Get_Durabilidad_Ametralladoras()
+{
+    return Durabilidad;
 }
 
 

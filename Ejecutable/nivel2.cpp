@@ -87,46 +87,104 @@ void Nivel2::Agachar_Personaje()
 void Nivel2::Lanzar_Bengalas()
 {
     Objetos Bengala(Tipo::Bengala);
-    //QTimer *Timer_ = new QTimer(this);
+    QTimer *Timer_ = new QTimer(this);
     QGraphicsPixmapItem *item;
     item = Bengala.Get_Objeto();
-    item->setScale(0.08);
-    item->setPos(300, 300);
+    item->setScale(0.05);
+    item->setPos(Adolfo.get_Objeto_En_La_Pantalla()->x()+20, Adolfo.get_Objeto_En_La_Pantalla()->y()+10);
     Nivel->addItem(item);
 
-    /*
     double vx = Bengala.Velocidad_X();
     double vy = Bengala.Velocidad_Y();
     double x0 = item->x();
     double y0 = item->y();
-    double Limite_ = Bengala.Get_Punto_Explosion();
-
     double t = 0;
     connect(Timer_, &QTimer::timeout, this, [=]() mutable {
-        Movimiento_Parabolico(item, Timer_, x0, y0, vx, vy, t, Limite_);
+        Movimiento_Parabolico(item, Timer_, x0, y0, vx, vy, t);
         t += 0.05;
     });
-
-    Timer_->start(50);*/
+    Timer_->start(5);
 }
 
-void Nivel2::Movimiento_Parabolico(QGraphicsPixmapItem *Objeto, QTimer *timer, double x0, double y0, double vx, double vy, double t, double Limite)
+void Nivel2::Movimiento_Parabolico(QGraphicsPixmapItem *Objeto, QTimer *timer, double x0, double y0, double vx, double vy, double t)
 {
+
     double g = 9.8;
     double newX = x0 + vx * t;
     double newY = y0 + vy * t + 0.5 * g * t * t;
-
-    qDebug() << "Posición actual de la bengala: " << newY;
     Objeto->setPos(newX, newY);
-
-    if (newY > (y0 + Limite)) {
-        qDebug() << "Se destruyó la bengala";
+    if (newY > y0 ) {
+        Objetos Señal (Tipo::Señal_Humo);
+        QGraphicsPixmapItem* Efecto = Señal.Get_Objeto();
+        Efecto->setPos(newX, newY);
+        Secuencia_Animaciones(Efecto, 4, Señal.Get_Secuencia_Explosiones(), 400, 1);
         Objeto->scene()->removeItem(Objeto);
         timer->stop();
         timer->deleteLater();
     }
 }
 
+void Nivel2::Lanzar_Bombardeo(double Posicion_X, double Posicion_Y)
+{
+    QGraphicsPixmapItem* item;
+    QTimer *Timer_MAS = new QTimer(this);
+    Objetos Bomba(Tipo::Granadas);
+    item = Bomba.Get_Objeto();
+    item->setScale(0.05);
+    item->setPos(Posicion_X+40, 0);
+    Nivel->addItem(item);
+
+    double t = 0;
+    double amplitud_x = 20;
+    double frecuencia_x = 1;
+    double velocidad_y = 300;
+    double x0 = item->x();
+    double y0 = item->y();
+    connect(Timer_MAS, &QTimer::timeout, this, [=]() mutable {
+        Movimiento_Armonico_Simple(item, Timer_MAS, x0, y0, amplitud_x, frecuencia_x, velocidad_y, t, Posicion_Y);
+        t += 0.05;
+    });
+    Timer_MAS->start(20);
+}
+
+void Nivel2::Movimiento_Armonico_Simple(QGraphicsPixmapItem *Objeto, QTimer *timer, double x0, double y0, double amplitud_x, double frecuencia_x, double velocidad_y, double t, double Limite)
+{
+    double omega_x = 2 * M_PI * frecuencia_x;
+
+    double newX = x0 + amplitud_x * sin(omega_x * t);
+    double newY = y0 + velocidad_y * t;
+    Objeto->setPos(newX, newY);
+    if (newY > Limite+0) {
+        Objetos Explosion(Tipo::Explosion);
+        QGraphicsPixmapItem* item = Explosion.Get_Objeto();
+        item->setPos(newX, newY);
+        item->setScale(0.4);
+        Nivel->removeItem(Objeto);
+        timer->stop();
+        timer->deleteLater();
+        Secuencia_Animaciones(item, 4, Explosion.Get_Secuencia_Explosiones(), 100, 0);
+    }
+}
+
+void Nivel2::Secuencia_Animaciones(QGraphicsPixmapItem* Imagen, int frame, vector<QGraphicsPixmapItem*> Secuencia_Animacion, int Timer, int Case)
+{
+    Nivel->addItem(Imagen);
+    QTimer* animTimer = new QTimer(this);
+    connect(animTimer, &QTimer::timeout, this, [=]() mutable {
+        if (frame > -1) {
+            Imagen->setPixmap(Secuencia_Animacion[frame]->pixmap());
+            frame--;
+        } else {
+            animTimer->stop();
+            animTimer->deleteLater();
+            Nivel->removeItem(Imagen);
+            if(Case == 1){
+                Lanzar_Bombardeo(Imagen->x(), Imagen->y());
+            }
+        }
+    });
+    animTimer->start(Timer);
+}
 void Nivel2::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
