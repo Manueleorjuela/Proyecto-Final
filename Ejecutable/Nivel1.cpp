@@ -118,7 +118,7 @@ void Nivel1::Secuencia_Animaciones(QGraphicsPixmapItem* Imagen, int frame, vecto
             frame--;
         } else {
             animTimer->stop();
-            animTimer->deleteLater();
+            delete animTimer;
             Nivel->removeItem(Imagen);
         }
     });
@@ -150,6 +150,13 @@ Nivel1::~Nivel1()
     delete DisparosEnemigos;
     delete Movimiento_Enemigos;
     delete Ejecucion_Nivel;
+    Proyectiles_Ronda.clear();
+    Soldados_Alemanes_EnEscena.clear();
+    Soldados_Franceses_EnEscena.clear();
+    Explosiones.clear();
+    Fumigacion_Gas.clear();
+    Efecto_Gas_Mostaza.clear();
+    Cañones_Alemanes_EnEscena.clear();
 }
 
 void Nivel1::keyPressEvent(QKeyEvent *event)
@@ -428,7 +435,7 @@ void Nivel1::Ejecutar_Movimiento_Parabolico_Gas()
             Movimiento_Parabolico(item, timer, x0, y0, vx, vy, t, Limite_, Explosion, 2, 1.2);
             t += 0.05;
         });
-        timer->start(10);
+        timer->start(5);
     }
 }
 
@@ -481,13 +488,13 @@ void Nivel1::Ejecutar_Movimiento_Parabolico_Bombas()
         Explosion = Explosiones[i].Get_Objeto(); // PARA EL EFECTO
         double x0 = item->x();
         double y0 = item->y();
+        double t = 0;
 
         connect(timer, &QTimer::timeout, this, [=]() mutable {
-            static double t = 0;
             Movimiento_Parabolico(item, timer, x0, y0, vx, vy, t, Limite_, Explosion, 1, 0.7);
             t += 0.05;
         });
-        timer->start(20);
+        timer->start(5);
     }
 }
 
@@ -508,7 +515,7 @@ void Nivel1::Movimiento_Parabolico(QGraphicsPixmapItem* Objeto, QTimer* timer, d
         }
         Objeto->scene()->removeItem(Objeto);
         timer->stop();
-        timer->deleteLater();
+        delete timer;
     }
 }
 
@@ -637,7 +644,7 @@ void Nivel1::Colisiones_SoldadosAlemanes()
                     if (Imagen_Colision) {
                         const QString& tipoObjeto = Imagen_Colision->data(Qt::UserRole).toString();
                         if (tipoObjeto == "Bala") {
-                            Muerte_Soldados_Grupo(Aleman, 50);
+                            Muerte_Soldados_Grupo(Aleman, 100);
                             Colisiones_Enemigos->stop();
                             QTimer::singleShot(500, this, [this]() {
                                 Colisiones_Enemigos->start(100);
@@ -667,7 +674,7 @@ void Nivel1::Inicializar_Ejecucion()
 {
     Ejecucion_Nivel = new QTimer();
     connect(Ejecucion_Nivel, &QTimer::timeout, this, &Nivel1::Terminar_Nivel);
-    Ejecucion_Nivel->start(100);
+    Ejecucion_Nivel->start(3000);
 }
 
 void Nivel1::Terminar_Nivel()
@@ -681,7 +688,6 @@ void Nivel1::Terminar_Nivel()
             Termino_Nivel = true;
         }
     }
-
     if (Enemigos_Muertos == Cantidad_Soldados_Alemanes){
         Ganar = true;
         Termino_Nivel = true;

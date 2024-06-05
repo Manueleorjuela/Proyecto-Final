@@ -59,7 +59,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="Creditos">
+      <widget class="QPushButton" name="Informacion">
        <property name="font">
         <font>
          <family>System</family>
@@ -67,7 +67,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Creditos</string>
+        <string>Informacion</string>
        </property>
       </widget>
      </item>
@@ -144,10 +144,62 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;MUERTO&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QPlainTextEdit" name="Intrucciones">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>280</y>
+      <width>261</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>System</family>
+     </font>
+    </property>
+    <property name="plainText">
+     <string>Controles:
+
+W -&gt; Mover hacia arriba.
+S -&gt; Mover hacia abajo.
+A -&gt; Mover hacia la derecha.
+D -&gt; Mover hacia la izquierda.
+C -&gt; Agacharse (Cuando te agachas no recibes daño).
+L -&gt; Disparar o lanzar.
+
+Primer Nivel
+Objetivo: Eliminar soldados alemanes.
+
+Segundo Nivel
+Objetivo: Eliminar torretas francesas.
+</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Volver">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>500</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>System</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>Volver</string>
+    </property>
+   </widget>
    <zorder>graphicsView</zorder>
    <zorder>Menu_2</zorder>
    <zorder>Menu</zorder>
    <zorder>Aviso_Muerte</zorder>
+   <zorder>Intrucciones</zorder>
+   <zorder>Volver</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

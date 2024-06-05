@@ -142,9 +142,9 @@ void Nivel2::Lanzar_Bengalas()
     double t = 0;
     connect(Timer_, &QTimer::timeout, this, [=]() mutable {
         Movimiento_Parabolico(item, Timer_, x0, y0, vx, vy, t);
-        t += 0.05;
+        t += 0.15;
     });
-    Timer_->start(5);
+    Timer_->start(1);
 }
 
 void Nivel2::Movimiento_Parabolico(QGraphicsPixmapItem *Objeto, QTimer *timer, double x0, double y0, double vx, double vy, double t)
@@ -186,6 +186,7 @@ void Nivel2::Lanzar_Bombardeo(double Posicion_X, double Posicion_Y)
     });
     Timer_MAS->start(20);
 }
+
 
 void Nivel2::Movimiento_Armonico_Simple(QGraphicsPixmapItem *Objeto, QTimer *timer, double x0, double y0, double amplitud_x, double frecuencia_x, double velocidad_y, double t, double Limite)
 {
@@ -431,5 +432,9 @@ void Nivel2::Modulo()
 Nivel2::~Nivel2()
 {
     delete item;
+    delete Colisiones_Ametralladoras_;
+    delete Colisiones_Personaje;
+    delete Disparos;
+    delete Ejecucion_Nivel;
 }
 

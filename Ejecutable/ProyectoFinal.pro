@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     Nivel1.cpp \
+    jugador.cpp \
     main.cpp \
     mainwindow.cpp \
     nivel2.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 
 HEADERS += \
     Nivel1.h \
+    jugador.h \
     mainwindow.h \
     nivel2.h \
     niveles.h \

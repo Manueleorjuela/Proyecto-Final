@@ -18,6 +18,9 @@ public:
     Nivel2(QGraphicsScene *&Fondo);
     void keyPressEvent(QKeyEvent *event) override;
     void Modulo();
+    bool get_Ganar();
+    bool get_Terminar();
+    ~Nivel2();
 
 private slots:
 
@@ -75,10 +78,6 @@ private:
     void Validar_Estados();
     bool Ganar;
     bool Terminar;
-    bool get_Ganar();
-    bool get_Terminar();
-
-    ~Nivel2();
 };
 
 #endif // NIVEL2_H
