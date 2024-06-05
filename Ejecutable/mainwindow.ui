@@ -109,40 +109,7 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="Salir_2">
-       <property name="font">
-        <font>
-         <family>System</family>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Salir</string>
-       </property>
-      </widget>
-     </item>
     </layout>
-   </widget>
-   <widget class="QLabel" name="Aviso_Muerte">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>260</y>
-      <width>161</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>System</family>
-      <pointsize>20</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;MUERTO&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
    </widget>
    <widget class="QPlainTextEdit" name="Intrucciones">
     <property name="geometry">
@@ -194,12 +161,51 @@ Objetivo: Eliminar torretas francesas.
      <string>Volver</string>
     </property>
    </widget>
+   <widget class="QLabel" name="Aviso_Partida_Terminada">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>370</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>GANASTE</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Mejor_Registro">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>370</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>graphicsView</zorder>
    <zorder>Menu_2</zorder>
    <zorder>Menu</zorder>
-   <zorder>Aviso_Muerte</zorder>
    <zorder>Intrucciones</zorder>
    <zorder>Volver</zorder>
+   <zorder>Aviso_Partida_Terminada</zorder>
+   <zorder>Mejor_Registro</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

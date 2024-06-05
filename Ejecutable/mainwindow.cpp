@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setFocusPolicy(Qt::StrongFocus);
     ui->graphicsView->setFocus();
     ui->graphicsView->scene()->installEventFilter(this);
+    ui->Aviso_Partida_Terminada->hide();
     this->setFocusPolicy(Qt::StrongFocus);
     this->setFocus();
 }
@@ -38,13 +39,18 @@ void MainWindow::Nivel1_Completado_()
 {
     Nivel1_Completado = Primer_Nivel->get_TerminoNivel();
     Nivel1_Ganado = Primer_Nivel->get_Ganar();
-
     if (Nivel1_Completado) {
+        Jugador.set_Estado_Nivel1(Nivel1_Ganado);
         Cambio_Nivel->stop();
         delete Primer_Nivel;
         if (!Nivel1_Ganado) {
+            Jugador.Asignar_Tiempo(0);
+            Jugador.set_Estado_Nivel2(false);
+            Jugador.Almacenar_NuevaMarca();
+            Escena->clear();
             Inicializar_Juego();
         } else {
+            Escena->clear();
             Segundo_Nivel_();
         }
     }
@@ -56,16 +62,26 @@ void MainWindow::Nivel2_Completado_()
     Nivel2_Ganado = Segundo_Nivel->get_Ganar();
 
     if(Nivel2_Completado){
+        Jugador.set_Estado_Nivel2(Nivel2_Ganado);
         Cambio_Nivel->stop();
         delete Segundo_Nivel;
         if(!Nivel2_Ganado){
+            Jugador.Asignar_Tiempo(0);
+            Jugador.Almacenar_NuevaMarca();
+            Escena->clear();
             Inicializar_Juego();
+        }else{
+            Jugador.Asignar_Tiempo(0);
+            Jugador.Almacenar_NuevaMarca();
+            Escena->clear();
+            Aviso_Partida_Terminada();
         }
     }
 }
 
 void MainWindow::Primer_Nivel_()
 {
+    Jugador.Asignar_Tiempo(1);
     Fondos->Cargar_Primer_Nivel();
     Ejecucion_PrimerNivel = true;
     Ejecucion_SegundoNivel = false;
@@ -108,22 +124,15 @@ void MainWindow::Inicializar_Cambio_Segundo_Nivel()
 void MainWindow::Inicializar_Juego()
 {
     ui->Menu->show();
+    ui->Mejor_Registro->hide();
     Fondos->Cargar_PantallaInicial();
     Escena = Fondos->Get_Escena();
     ui->Menu_2->hide();
-    ui->Aviso_Muerte->hide();
     ui->Volver->hide();
     ui->Intrucciones->hide();
     Segundo_Nivel = nullptr;
     Primer_Nivel = nullptr;
     Cambio_Nivel = nullptr;
-}
-
-void MainWindow::Volver_A_Intentar_Nivel1()
-{
-    ui->Aviso_Muerte->show();
-    Fondos->Cargar_PantallaInicial();
-    ui->Menu_2->show();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -136,31 +145,36 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void MainWindow::on_Reiniciar_Nivel_clicked()
-{
-    if (Ejecucion_PrimerNivel) {
-        ui->Menu_2->hide();
-        ui->Aviso_Muerte->hide();
-        Primer_Nivel_();
-    }
-}
-
-void MainWindow::on_Salir_2_clicked()
-{
-    close();
-}
-
 void MainWindow::on_Volver_clicked()
 {
     ui->Volver->hide();
+    ui->Mejor_Registro->hide();
     ui->Intrucciones->hide();
     ui->Menu->show();
 }
 
 void MainWindow::on_Informacion_clicked()
 {
+    ui->Aviso_Partida_Terminada->hide();
     ui->Menu->hide();
     ui->Intrucciones->show();
     ui->Volver->show();
+}
+
+void MainWindow::Aviso_Partida_Terminada()
+{
+    Fondos->Cargar_PantallaInicial();
+    ui->Aviso_Partida_Terminada->show();
+    ui->Volver->show();
+}
+
+void MainWindow::on_Registros_clicked()
+{
+    QString Registros =  QString::fromStdString(Jugador.Mejor_Tiempo_Registrado()) + " minutos";
+    ui->Mejor_Registro->show();
+    ui->Mejor_Registro->setText(Registros);
+    ui->Menu->hide();
+    ui->Volver->show();
+
 }
 

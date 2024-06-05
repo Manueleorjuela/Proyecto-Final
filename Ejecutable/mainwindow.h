@@ -5,6 +5,7 @@
 #include "niveles.h"
 #include "nivel2.h"
 #include "Nivel1.h"
+#include "jugador.h"
 
 using namespace std;
 
@@ -30,10 +31,11 @@ private slots:
     void Nivel1_Completado_();
     void Nivel2_Completado_();
 
-    void on_Reiniciar_Nivel_clicked();
-    void on_Salir_2_clicked();
     void on_Volver_clicked();
     void on_Informacion_clicked();
+
+
+    void on_Registros_clicked();
 
 private:
     Niveles *Fondos;
@@ -42,6 +44,10 @@ private:
     Ui::MainWindow *ui;
     Nivel1 *Primer_Nivel;
     Nivel2 *Segundo_Nivel;
+
+    jugador Jugador;
+
+    void Aviso_Partida_Terminada();
 
     bool Ejecucion_PrimerNivel;
     bool Ejecucion_SegundoNivel;
@@ -59,7 +65,6 @@ private:
     bool Nivel1_Completado;
     bool Nivel1_Ganado;
 
-    void Volver_A_Intentar_Nivel1();
 };
 
 #endif // MAINWINDOW_H
