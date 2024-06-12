@@ -20,10 +20,12 @@ enum class Direccion{
 
 class Soldados
 {
+private:
+
     int Vida;
     QPixmap Direccion_Imagen;
-    Direccion Orientacion;
     Nacionalidad nacionalidad;
+    Direccion Orientacion;
     QGraphicsPixmapItem* Objeto_En_La_Pantalla;
     vector <QGraphicsPixmapItem*> Secuencia_Muerte;
 
@@ -32,12 +34,10 @@ class Soldados
     QPixmap Agachado_Izquierda;
     QPixmap Parado_Derecha;
     QPixmap Parado_Izquierda;
-
-    void Inicializar_Muerte_Franceses();
-    void Inicializar_Muerte_Alemanes();
-
     //Estado
     bool Vivo;
+    void Inicializar_Muerte_Franceses();
+    void Inicializar_Muerte_Alemanes();
 
 public:
     Soldados(Nacionalidad nacion);

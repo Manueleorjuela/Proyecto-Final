@@ -127,6 +127,7 @@ void MainWindow::Inicializar_Juego()
     ui->Mejor_Registro->hide();
     Fondos->Cargar_PantallaInicial();
     Escena = Fondos->Get_Escena();
+    ui->Aviso_Partida_Terminada->hide();
     ui->Menu_2->hide();
     ui->Volver->hide();
     ui->Intrucciones->hide();

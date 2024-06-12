@@ -121,6 +121,6 @@ void Soldados::Set_Vivo(bool Estado)
 
 Soldados::~Soldados()
 {
-    //delete Objeto_En_La_Pantalla;
+
 }
 

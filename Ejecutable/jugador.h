@@ -24,7 +24,6 @@ private:
     int Tiempo_Inicial;
     int Tiempo_Final;
 
-
     //Para los metodos
     string Cargar_Informacion_Guardada(string Nombre_Archivo);
     void Asignar_Fecha();

@@ -26,6 +26,7 @@ private:
 
     QGraphicsPixmapItem* Objeto_En_La_Pantalla;
     QPixmap Direccion_Imagen;
+
     double velocidadenX;
     double velocidadenY;
     double Velocidad_Angular;
@@ -36,15 +37,13 @@ private:
     Tipo Clasificacion;
     vector <QGraphicsPixmapItem*> Secuencia_Explosiones;
 
-    //Asignacion aleatoria de las velocidades
-    int generarNumeroAleatorio(int, int);
-
     //Para las balas
     QPixmap Bala;
-
     //Para las ametralladoras
     int Durabilidad;
 
+    //Asignacion aleatoria de las velocidades
+    int generarNumeroAleatorio(int, int);
 public:
 
     double Velocidad_X();
@@ -63,7 +62,9 @@ public:
 
     vector <QGraphicsPixmapItem*> Get_Secuencia_Explosiones();
 
+
     void Set_Durabilidad_Ametralladoras(int Nueva_Durabilidad);
+
     int Get_Durabilidad_Ametralladoras();
 
 };

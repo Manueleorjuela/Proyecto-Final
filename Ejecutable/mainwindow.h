@@ -21,9 +21,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-protected:
-    void keyPressEvent(QKeyEvent *event);
-
 private slots:
     void on_Iniciar_Partida_clicked();
     void on_Salir_clicked();
@@ -33,31 +30,31 @@ private slots:
 
     void on_Volver_clicked();
     void on_Informacion_clicked();
-
-
     void on_Registros_clicked();
 
 private:
     Niveles *Fondos;
+
     QGraphicsScene *Escena;
     QTimer* Cambio_Nivel;
     Ui::MainWindow *ui;
+
     Nivel1 *Primer_Nivel;
     Nivel2 *Segundo_Nivel;
 
     jugador Jugador;
 
-    void Aviso_Partida_Terminada();
 
     bool Ejecucion_PrimerNivel;
     bool Ejecucion_SegundoNivel;
 
+    void Aviso_Partida_Terminada();
     void Primer_Nivel_();
     void Segundo_Nivel_();
-
     void Inicializar_Cambio_Primer_Nivel();
     void Inicializar_Cambio_Segundo_Nivel();
     void Inicializar_Juego();
+    void keyPressEvent(QKeyEvent *event);
 
     bool Nivel2_Completado;
     bool Nivel2_Ganado;

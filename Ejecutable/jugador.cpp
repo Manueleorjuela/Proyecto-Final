@@ -100,7 +100,7 @@ string jugador::Mejor_Tiempo_Registrado()
     }
 
     int Numero_Menor = numeric_limits<int>::max();
-    int Numero_Actual;
+    int Numero_Actual = 0;
 
     for (int i = 0; i < int(lineas.size()); i++){
         string Palabra;

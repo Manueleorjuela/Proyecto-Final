@@ -30,7 +30,6 @@ private:
     // Personaje principal
     vector<Soldados> Soldados_Franceses_EnEscena;
     vector <Soldados> Soldados_Alemanes_EnEscena;
-
     Soldados* Pierre_De_Gaulle;
 
     //Enemigos
@@ -59,7 +58,6 @@ private:
     void Añadir_Cañones();
     void Ubicar_Cañones();
 
-
     //Para las animaciones
     void MoverPersonaje(int DeltX, int DeltY);
 
@@ -71,8 +69,8 @@ private:
     void Agachar_Personaje();
     bool Agachado;
 
-    void Lanzamiento_Proyectiles();
     vector<Objetos> Proyectiles_Ronda;
+    void Lanzamiento_Proyectiles();
     void Ubicar_Proyectiles();
     void Ejecutar_Movimiento_Parabolico_Bombas();
     void Inicializar_Proyectiles();
